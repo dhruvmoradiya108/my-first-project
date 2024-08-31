@@ -1,1 +1,74 @@
-<p>user-auth works!</p>
+<div class="user-auth">
+    <div class="sign-up" *ngIf="!showLoginForm">
+      <h1>User Sign-up</h1>
+      <form
+        #userSignup="ngForm"
+        (ngSubmit)="onUserSignup(userSignup.value)"
+        class="common-form"
+      >
+        <input
+          type="text"
+          class="form-input"
+          name="name"
+          placeholder="Enter User Name..."
+          ngModel
+        />
+        <input
+          type="text"
+          class="form-input"
+          name="email"
+          placeholder="Enter User Email..."
+          ngModel
+        />
+        <input
+          type="password"
+          class="form-input"
+          name="password"
+          placeholder="Enter User Password..."
+          ngModel
+        />
+        <button class="form-button">Sign up</button>
+        <a (click)="openLoginForm()"> Already have an Account? Click Here</a>
+      </form>
+    </div>
+    
+    <div class="login" *ngIf="showLoginForm">
+      <h1>User Login</h1>
+  
+      <p class="error-p">{{ userAuthError }}</p>
+  
+      <form
+        #userLogin="ngForm"
+        (ngSubmit)="onUserLogin(userLogin.value)"
+        class="common-form"
+      >
+        <input
+          type="text"
+          class="form-input"
+          name="email"
+          id="email"
+          placeholder="Enter User Email..."
+          ngModel
+          #email="ngModel"
+          required
+        />
+        <p class="invalid-input"><span *ngIf="email.invalid && email.touched">Please enter valid Email.</span></p>
+        <input
+          type="password"
+          class="form-input"
+          name="password"
+          id="password"
+          placeholder="Enter User Password..."
+          minlength="2"
+          maxlength="10"
+          ngModel
+          #password="ngModel"
+          required
+        />
+        <p class="invalid-input"><span *ngIf="password.invalid && password.touched">Please enter valid Password.</span></p>
+        <button [disabled]="userLogin.invalid" class="form-button">Login</button>
+        <a (click)="openSignUpForm()"> Don't have an Account? Click Here</a>
+      </form>
+    </div>
+  </div>
+  

@@ -1,1 +1,17 @@
-<p>search works!</p>
+<div class="search-item" *ngFor="let item of searchResult">
+    <div>
+      <a routerLink="/details/{{ item.id }}"><img src="{{ item.image }}" /></a>
+    </div>
+    <div class="details">
+      <h5>{{ item.name }}</h5>
+      <p>
+        <b>Price: {{ item.price | currency : "INR" }}</b>
+      </p>
+      <p>
+        <span>Color: {{ item.color }}</span
+        ><span>Category: {{ item.category }}</span>
+      </p>
+      <p>{{ item.description }}</p>
+    </div>
+  </div>
+  

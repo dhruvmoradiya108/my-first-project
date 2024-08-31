@@ -1,0 +1,115 @@
+ /* { 
+    background-color: lightyellow;
+} */
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav h1 {
+    color: brown;
+    margin: 0;
+    font-size: 30px;
+}
+
+.nav h1 a {
+    color: brown;
+    text-decoration: none;
+}
+
+.nav .nav-search {
+    flex: 1;
+    display: flex;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5px;
+}
+
+
+
+.nav .nav-search input {
+    flex: 1;
+    color: brown;
+    padding-left: 10px;
+    background-color: white;
+    border: 1px solid brown;
+    height: 25px;
+    border-right: none;
+}
+
+.nav .nav-search button {
+    color: white;
+    border: 1px solid brown;
+    background-color: brown;
+    border-left: none;
+    cursor: pointer;
+    height: 28px;
+}
+
+ul .nav-search-user {
+    flex: 1;
+    display: flex;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5px;
+}
+
+ul .nav-search-user input {
+    flex: 1;
+    color: brown;
+    padding-left: 10px;
+    background-color: white;
+    border: 1px solid brown;
+    height: 25px;
+    border-right: none;
+}
+
+ul .nav-search-user button {
+    color: white;
+    border: 1px solid brown;
+    background-color: brown;
+    border-left: none;
+    cursor: pointer;
+    height: 28px;
+}
+
+
+.nav ul {
+    display: inline-flex;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    list-style-type: none;
+}
+
+.nav ul li {
+    padding-left: 15px;
+    padding-top: 12px;
+}
+
+.nav ul li a {
+    text-decoration: none;
+    color: brown;
+}
+.nav ul li fa-icon {
+    padding-right: 5px;
+    color: brown;
+}
+
+.suggested-search {
+    position:absolute;
+    top: 40px;
+    z-index: 10;
+    display: list-item !important;
+    background-color: #fff;
+    width: 300px;
+}
+
+.suggested-search li {
+    padding: 5px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    color: brown;
+}
+

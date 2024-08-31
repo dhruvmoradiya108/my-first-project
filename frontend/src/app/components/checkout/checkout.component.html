@@ -1,1 +1,141 @@
-<p>checkout works!</p>
+<div class="checkout-page">
+    <h1>Checkout</h1>
+  
+    <div class="checkout-container">
+      <!-- Billing Information -->
+      <div class="billing-info">
+        <h3>Billing Information</h3>
+        <p class="successMessage-p">{{orderMsg}}</p>
+        <form #orderData="ngForm" (ngSubmit)="onPlaceOrder(orderData.value)">
+          <div class="form-group">
+            <label for="fullName">Full Name:</label>
+            <input
+              type="text"
+              name="fullName"
+              id="fullName"
+              class="form-control"
+              ngModel
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              class="form-control"
+              ngModel
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="phonenumber">Contact No.:</label>
+            <input
+              type="text"
+              name="phonenumber"
+              id="phonenumber"
+              class="form-control"
+              ngModel
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="address">Address:</label>
+            <input
+              type="text"
+              name="address"
+              id="address"
+              class="form-control"
+              ngModel
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="city">City:</label>
+            <input
+              type="text"
+              name="city"
+              id="city"
+              class="form-control"
+              ngModel
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="zipCode">Zip Code:</label>
+            <input
+              type="text"
+              name="zipCode"
+              id="zipCode"
+              class="form-control"
+              ngModel
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="country">Country:</label>
+            <input
+              type="text"
+              name="country"
+              id="country"
+              class="form-control"
+              ngModel
+              required
+            />
+          </div>
+        </form>
+      </div>
+  
+      <!-- Payment Information & Order Summary -->
+      <div class="payment-and-summary">
+        <div class="payment-info">
+          <h3>Payment Method</h3>
+          <label for="cod-option">
+            <input
+              type="radio"
+              id="cod-option"
+              name="payment"
+              value="cashOnDelivery"
+              checked
+            />
+            Cash on Delivery
+          </label>
+        </div>
+  
+        <div class="order-summary">
+          <h3>Order Summary</h3>
+          <ul>
+            <li>
+              <span>Amount:</span>
+              <span>{{ priceSummary.price | currency : 'INR' }}</span>
+            </li>
+            <li>
+              <span>Tax:</span>
+              <span>{{ priceSummary.tax | currency : 'INR' }}</span>
+            </li>
+            <li>
+              <span>Delivery Charges:</span>
+              <span>{{ priceSummary.delivery | currency : 'INR' }}</span>
+            </li>
+            <li>
+              <span>Discount:</span>
+              <span>{{ priceSummary.discount | currency : 'INR' }}</span>
+            </li>
+            <li>
+              <span>
+                <h4>Total:</h4>
+              </span>
+              <span>
+                <h4>{{ priceSummary.total | currency : 'INR' }}</h4>
+              </span>
+            </li>
+          </ul>
+          <button class="checkout-button" (click)="onPlaceOrder(orderData.value)">
+            Place Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,1 +1,31 @@
-<p>product-details works!</p>
+<div class="row">
+    <div class="product-details" *ngIf="productData">
+      <div class="image-container">
+        <img class="product-image" src="{{ productData.image }}" />
+      </div>
+      <div class="details-container">
+        <div class="details">
+          <h1>{{ productData.name }}</h1>
+          <h3>Price: {{ productData.price | currency : "INR" }}</h3>
+          <div>
+            Color:
+            <span
+              [style.backgroundColor]="productData.color"
+              class="product-color"
+            ></span>
+          </div>
+          <h6>Category: {{ productData.category }}</h6>
+          <h6>{{ productData.description }}</h6>
+          <button>Buy Now</button>
+          <button *ngIf="!removeCart" (click)="onAddToCart()">Add to Cart</button>
+          <button *ngIf="removeCart" (click)="onRemoveFromCart(productData.id)">Remove to Cart</button>
+          <div class="quantity-group">
+            <fa-icon (click)="handleQuantity('min')" [icon]="faMinus"></fa-icon>
+            <input type="text" value="{{ productQuantity }}" />
+            <fa-icon (click)="handleQuantity('plus')" [icon]="faPlus"></fa-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

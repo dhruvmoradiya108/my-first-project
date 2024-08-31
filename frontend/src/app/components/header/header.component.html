@@ -1,1 +1,83 @@
-<p>header works!</p>
+<nav class="navbar">
+    <div class="nav">
+      <div>
+        @if (menuType === 'sellerlogin') {
+        <h1 style="margin-left: 290%"><a routerLink="">one08ight</a></h1>
+        } @else {
+        <h1><a routerLink="">one08ight</a></h1>
+        }
+      </div>
+  
+      <div *ngIf="menuType !== 'sellerlogin'" class="nav-search">
+        <input
+          type="text"
+          #searchInput
+          (keyup)="serarchProduct($event)"
+          (blur)="hideSearchMenu()"
+          placeholder="Search..."
+          [(ngModel)]="filterData"
+        />
+        <button (click)="onSubmitSearch(searchInput.value)">Search</button>
+        <ul class="suggested-search" *ngIf="searchResult">
+          <li *ngFor="let item of searchResult | filter : filterData">
+            <a (mousedown)="redirectToDetails(item.id)"> {{ item.name }}</a>
+          </li>
+        </ul>
+      </div>
+  
+      <div [ngSwitch]="menuType">
+        <ul *ngSwitchCase="'default'">
+          <li><fa-icon [icon]="faHome"> </fa-icon><a routerLink="">Home</a></li>
+          <li>
+            <fa-icon [icon]="faRightFromBracket"> </fa-icon
+            ><a routerLink="/user-auth">Log In/Sign Up</a>
+          </li>
+          <li>
+            <fa-icon [icon]="faPerson"> </fa-icon
+            ><a routerLink="sell-auth">Seller</a>
+          </li>
+          <li>
+            <fa-icon [icon]="faShoppingCart"> </fa-icon><a href="#">Cart({{ cartItems }})</a>
+          </li>
+        </ul>
+        <ul *ngSwitchCase="'user'">
+          <li><fa-icon [icon]="faHome"> </fa-icon><a routerLink="">Home</a></li>
+          <li>
+            <fa-icon [icon]="faPowerOff"> </fa-icon
+            ><a (click)="onLogoutUser()">Logout</a>
+          </li>
+          <li>
+            <fa-icon [icon]="faUser"> </fa-icon><a>{{ userName | titlecase }}</a>
+          </li>
+          <li>
+            <fa-icon [icon]="faList12"> </fa-icon><a routerLink="my-orders">My Orders</a>
+          </li>
+          <li>
+            <fa-icon [icon]="faShoppingCart"></fa-icon><a [routerLink]="cartItems>0?'cart-page':null">Cart({{ cartItems }})</a>
+          </li>
+        </ul>
+        <ul *ngSwitchCase="'seller'">
+          <li>
+            <fa-icon [icon]="faPlus"></fa-icon
+            ><a routerLink="seller-add-product">Add Product</a>
+          </li>
+          <li>
+            <fa-icon [icon]="faList12"></fa-icon
+            ><a routerLink="seller-home">List</a>
+          </li>
+          <li>
+            <fa-icon [icon]="faPowerOff"> </fa-icon
+            ><a (click)="onLogout()" href="">Log out</a>
+          </li>
+          <li>
+            <fa-icon [icon]="faUser"> </fa-icon>
+            <a href="#">
+              {{ sellerName | titlecase }}
+              <!-- "| titlecase" will make first letter capital and this is example of pipe -->
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  

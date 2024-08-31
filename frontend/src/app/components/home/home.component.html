@@ -1,1 +1,38 @@
-<p>home works!</p>
+<div class="carousel-container">
+    <div
+      class="carousel-slide"
+      [ngStyle]="{ transform: 'translateX(' + -currentSlide * 100 + '%)' }"
+    >
+      <div *ngFor="let item of popularProductsProp" class="carousel-item">
+        <a routerLink="/details/{{ item.id }}"
+          ><img src="{{ item.image }}" alt="Image" class="carousel-image"
+        /></a>
+        <div class="carousel-description">{{ item.name }}</div>
+      </div>
+    </div>
+    <button class="carousel-arrow left" (click)="prevSlide()">&#10094;</button>
+    <button class="carousel-arrow right" (click)="nextSlide()">&#10095;</button>
+  </div>
+  
+  <div class="product-list-wrapper">
+    <h1>Trending Products</h1>
+    <div class="row">
+      <div class="product-item" *ngFor="let item of trendyProducts">
+        <img src="{{ item.image }}" />
+        <div class="product-details">
+          <h5 class="name-head">{{ item.name }}</h5>
+          <div class="product-price">
+            <h5>Price: {{ item.price | currency : "INR" }}</h5>
+          </div>
+          <div class="product-color">
+            <h5>Color: {{ item.color }}</h5>
+          </div>
+        </div>
+        <div class="product-footer">
+          <a routerLink="/details/{{ item.id }}">View Details</a>
+          <a href="">Add to cart</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  

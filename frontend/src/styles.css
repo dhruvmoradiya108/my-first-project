@@ -1,1 +1,77 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+
+/* Fonts CSS */
+/* .gruppo-regular {
+    font-family: "Gruppo", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  } */
+
+
+
+  body {
+    background-color: white;
+    font-family: "Cinzel", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.container {
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.common-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: auto;
+}
+
+.form-input {
+    height: 30px;
+    margin-bottom: 20px;
+    border: 1px solid brown;
+    padding-left: 15px;
+    color: brown;
+}
+
+.form-button {
+    height: 30px;
+    border: 1px solid brown;
+    background-color: brown;
+    color: white;
+    cursor: pointer;
+}
+
+.error-p {
+    color: red;
+    text-align: center;
+}
+
+.successMessage-p {
+    color: green;
+    text-align: center;
+}
+
+.invalid-input {
+    color: red;
+    font-size: 12px;
+    margin-top: -20px;
+}
+
+button:disabled{
+    cursor: not-allowed;
+    background-color: #cccccc;
+    color: #666666;
+    border: 1px solid #999999;
+}
+
+.max-width{
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid brown;
+    border-radius: 10px;
+}

@@ -1,0 +1,137 @@
+/* .cart-page {
+    margin-top: 40px;
+    margin-bottom: 50px;
+}
+
+.cart-row {
+    padding-right: 40%;
+    display: flex;
+}
+
+.cart-page h1{
+    text-align: center;
+}
+
+/* .cart-summary-details {
+    border: 1px solid brown;
+} */
+
+/* .cart-summary-details img {
+    height: 100px;
+}
+
+.cart-summary-details ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid brown;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    margin-bottom: 15px;  
+}
+  */
+
+  .cart-page {
+    margin: 40px 0;
+}
+
+.cart-page h1 {
+    text-align: center;
+    color: brown;
+}
+
+.cart-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.cart-items {
+    flex: 0 1 60%;
+    margin-right: 20px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.cart-item img {
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
+    border-radius: 5px;
+}
+
+.item-details {
+    flex-grow: 1;
+}
+
+.item-name,
+.item-price,
+.item-quantity {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.item-price {
+    color: #888;
+}
+
+.remove-button {
+    background-color: #b71c1c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.remove-button:hover {
+    background-color: #a31515;
+}
+
+.cart-summary {
+    flex: 0 1 30%;
+    height: 350px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f5f5f5;
+    overflow-y: auto;
+}
+
+.cart-summary h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.cart-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cart-summary li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.cart-summary .total {
+    font-weight: bold;
+}
+
+.cart-summary .total h4 {
+    margin: 0;
+}

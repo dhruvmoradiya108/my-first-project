@@ -1,1 +1,163 @@
-<p>cart-page works!</p>
+<!-- <div class="cart-page">
+  <h1>Your Cart Details</h1>
+  <div class="cart-row">
+    <div class="cart-summary-details">
+      <ul>
+        <li>
+          <img
+            src="https://images-cdn.ubuy.co.in/64ccb2559d908f42222b598a-hp-pavilion-13-3-fhd-intel-core-i3.jpg"
+          />
+        </li>
+        <li>
+          <span>Product Name</span>
+        </li>
+        <li>
+          <span>Price: 100</span>
+        </li>
+        <li>
+          <span>Quantity</span>
+        </li>
+        <li>
+          <button class="form-button" style="border-radius: 10px">
+            Remove From Cart
+          </button>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <img
+            src="https://images-cdn.ubuy.co.in/64ccb2559d908f42222b598a-hp-pavilion-13-3-fhd-intel-core-i3.jpg"
+          />
+        </li>
+        <li>
+          <span>Product Name</span>
+        </li>
+        <li>
+          <span>Price: 100</span>
+        </li>
+        <li>
+          <span>Quantity</span>
+        </li>
+        <li>
+          <button class="form-button" style="border-radius: 10px">
+            Remove From Cart
+          </button>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <img
+            src="https://images-cdn.ubuy.co.in/64ccb2559d908f42222b598a-hp-pavilion-13-3-fhd-intel-core-i3.jpg"
+          />
+        </li>
+        <li>
+          <span>Product Name</span>
+        </li>
+        <li>
+          <span>Price: 100</span>
+        </li>
+        <li>
+          <span>Quantity</span>
+        </li>
+        <li>
+          <button class="form-button" style="border-radius: 10px">
+            Remove From Cart
+          </button>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <img
+            src="https://images-cdn.ubuy.co.in/64ccb2559d908f42222b598a-hp-pavilion-13-3-fhd-intel-core-i3.jpg"
+          />
+        </li>
+        <li>
+          <span>Product Name</span>
+        </li>
+        <li>
+          <span>Price: 100</span>
+        </li>
+        <li>
+          <span>Quantity</span>
+        </li>
+        <li>
+          <button class="form-button" style="border-radius: 10px">
+            Remove From Cart
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div class="cart-summary">
+        <h3>Summary</h3>
+        <ul>
+            <li>
+                <span>Amount:</span>
+                <span>300</span>
+            </li>
+            <li>
+                <span>Tax:</span>
+                <span>30</span>
+            </li>
+            <li>
+                <span>Delivery Charges:</span>
+                <span>20</span>
+            </li>
+            <li>
+                <span>Discount:</span>
+                <span>50</span>
+            </li>
+            <li>
+                <span><h4>Total:</h4></span>
+                <span><h4>300</h4></span>
+            </li>
+        </ul>
+    </div>
+  </div>
+</div> -->
+
+<div class="cart-page">
+    <h1>Your Cart Details</h1>
+    <div class="cart-container">
+      <div class="cart-items">
+        <div class="cart-item" *ngFor="let item of cartData">
+          <img
+            src="{{ item.image }}"
+          />
+          <div class="item-details">
+            <span class="item-name">{{ item.name }}</span>
+            <span class="item-price">Price: {{ item.price | currency : 'INR' }}</span>
+            <span class="item-quantity">Quantity: {{ item.quantity }}</span>
+          </div>
+          <button class="remove-button" (click)="removeToCart(item.id)">Remove From Cart</button>
+        </div>
+      </div>
+  
+      <div class="cart-summary">
+        <h3>Summary</h3>
+        <ul>
+          <li>
+            <span>Amount:</span>
+            <span>{{ priceSummary.price | currency : 'INR' }}</span>
+          </li>
+          <li>
+            <span>Tax:</span>
+            <span>{{ priceSummary.tax | currency : 'INR' }}</span>
+          </li>
+          <li>
+            <span>Delivery Charges:</span>
+            <span>{{ priceSummary.delivery | currency : 'INR' }}</span>
+          </li>
+          <li>
+            <span>Discount:</span>
+            <span>{{ priceSummary.discount | currency : 'INR' }}</span>
+          </li>
+          <li class="total">
+            <h4>Total:</h4>
+            <h4>{{ priceSummary.total | currency : 'INR' }}</h4>
+          </li>
+          <button (click)="onCheckout()" class="form-button max-width">Checkout</button>
+        </ul>
+      </div>
+    </div>
+  </div>
+  

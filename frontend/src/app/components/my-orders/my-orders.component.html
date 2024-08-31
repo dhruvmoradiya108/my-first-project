@@ -1,1 +1,38 @@
-<p>my-orders works!</p>
+<div class="my-orders">
+    <h1>My Orders</h1>
+    <div class="order-header">
+      <div class="order-column">
+        <span>Orders</span>
+      </div>
+      <div class="order-column">
+        <span>Order Id</span>
+      </div>
+      <div class="order-column">
+        <span>Price</span>
+      </div>
+      <div class="order-column">
+        <span>Status</span>
+      </div>
+      <div class="order-column">
+        <span>Cancel Order</span>
+      </div>
+    </div>
+    <div class="order-row" *ngFor="let order of orderedData">
+      <div class="order-column">
+        <img class="order-img" src="https://www.clipartmax.com/png/middle/210-2106541_track-my-order-beach-volleyball.png" alt="Order Image">
+      </div>
+      <div class="order-column">
+        <span>#{{ order.id }}</span>
+      </div>
+      <div class="order-column">
+        <span>{{ order.priceSummary | currency: 'INR'}}</span>
+      </div>
+      <div class="order-column">
+        <span>In Progress</span>
+      </div>
+      <div class="order-column">
+        <button class="cancel-button" (click)="cancelOrder(order.id)">Cancel Order</button>
+      </div>
+    </div>
+  </div>
+  

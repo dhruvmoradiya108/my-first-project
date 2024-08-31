@@ -1,1 +1,77 @@
-<p>seller-auth works!</p>
+<div class="seller-auth">
+    <div *ngIf="!showLoginForm" class="sign-up">
+      <h1>Seller Sign-up</h1>
+      <p class="error-p">{{ authError }}</p>
+      <form
+        #sellerSignUp="ngForm"
+        (ngSubmit)="onSignUp(sellerSignUp.value)"
+        class="common-form"
+      >
+        <input
+          type="text"
+          class="form-input"
+          id="name"
+          placeholder="Enter Name..."
+          name="name"
+          style="border-top-left-radius: 20px"
+          ngModel
+        />
+        <input
+          type="text"
+          class="form-input"
+          placeholder="Enter Email..."
+          name="email"
+          ngModel
+        />
+        <input
+          type="password"
+          class="form-input"
+          placeholder="Enter Password..."
+          name="password"
+          ngModel
+        />
+        <button class="form-button" style="border-bottom-right-radius: 20px">
+          Sign Up
+        </button>
+        <a class="authtogglelink" (click)="openLoginForm()"
+          >Already have account? CLick to Login</a
+        >
+      </form>
+    </div>
+  
+    <div *ngIf="showLoginForm" class="login">
+      <h1>Seller Login</h1>
+      <p class="error-p">
+        {{ authError }} 
+      </p>
+      
+      <form
+        #sellerLogin="ngForm"
+        (ngSubmit)="onLogin(sellerLogin.value)"
+        class="common-form"
+      >
+        <input
+          type="text"
+          class="form-input"
+          placeholder="Enter Email..."
+          name="email"
+          style="border-top-left-radius: 20px"
+          ngModel
+        />
+        <input
+          type="password"
+          class="form-input"
+          placeholder="Enter Password..."
+          name="password"
+          ngModel
+        />
+        <button class="form-button" style="border-bottom-right-radius: 20px">
+          Login
+        </button>
+        <a class="authtogglelink" (click)="openSignUpForm()"
+          >Don't have account? Click to Sign Up</a
+        >
+      </form>
+    </div>
+  </div>
+  

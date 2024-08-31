@@ -1,0 +1,239 @@
+{
+    "seller": [
+      {
+        "id": "80c4",
+        "name": "Dhruv Moradiya",
+        "email": "dhruv@onezeroeight.com",
+        "password": "abc@1234"
+      },
+      {
+        "id": "ff31",
+        "name": "Meet Moradiya",
+        "email": "Meet@onezeroeight.com",
+        "password": "abcd@1234"
+      },
+      {
+        "id": "b95a",
+        "name": "Joey Tribbiani",
+        "email": "joey@onezeroeight.com",
+        "password": "asibfiabg"
+      },
+      {
+        "id": "7789",
+        "name": "Chandler Bing",
+        "email": "chandler@onezeroeight.com",
+        "password": "KBJEFKBJWkf"
+      },
+      {
+        "id": "becc",
+        "name": "Bruce",
+        "email": "bruce@onezeroeight.com",
+        "password": "KSVAGADSG"
+      },
+      {
+        "id": "f5e6",
+        "name": "Robert",
+        "email": "robert@onezeroeight.com",
+        "password": "UIbefbIHIBIBiuh"
+      },
+      {
+        "id": "899e",
+        "name": "Arjun",
+        "email": "arjun@onezeroeight.com",
+        "password": "sbgbBJSbgjk"
+      },
+      {
+        "id": "209a",
+        "name": "Dhruv Patel",
+        "email": "patel@dhruv.gmail.com",
+        "password": "patel"
+      },
+      {
+        "id": "ffbf",
+        "name": "Dhruv",
+        "email": "abc@gmail.com",
+        "password": "abc@123"
+      },
+      {
+        "id": "f40d",
+        "name": "Arjun Mangukiya",
+        "email": "arjun@seller.com",
+        "password": "arjun.123"
+      },
+      {
+        "id": "1cb3",
+        "name": "Priyanshu Moradiya",
+        "email": "priyanshu@seller.com",
+        "password": "priyanshu.123"
+      },
+      {
+        "id": "5e56",
+        "name": "Chris",
+        "email": "chris@gmail.com",
+        "password": "ajgsghasfg"
+      },
+      {
+        "id": "c981",
+        "name": "Michel",
+        "email": "michel@seller.com",
+        "password": "abc@123"
+      }
+    ],
+    "products": [
+      {
+        "name": "HP laptop",
+        "price": "149900",
+        "category": "Laptop",
+        "color": "Grey",
+        "description": "HP laptop here",
+        "image": "https://images-cdn.ubuy.co.in/64ccb2559d908f42222b598a-hp-pavilion-13-3-fhd-intel-core-i3.jpg",
+        "id": "c880"
+      },
+      {
+        "name": "Samsung S24 Ultra",
+        "price": "90000",
+        "category": "Mobile",
+        "color": "Titanium Green",
+        "description": "Samsung S24 Ultra Item here",
+        "image": "https://images.samsung.com/is/image/samsung/assets/levant/smartphones/galaxy-s24-ultra/buy/S24Ultra-Color-Titanium_Green_PC.jpg?imbypass=true",
+        "id": "4134"
+      },
+      {
+        "name": "One Plus 11",
+        "price": "80000",
+        "category": "Mobile",
+        "color": "Green",
+        "description": "Oneplus phone here",
+        "image": "https://oasis.opstatics.com/content/dam/oasis/page/2023/na/oneplus-11/specs/green-img.png",
+        "id": "8bb2"
+      },
+      {
+        "id": "7e38",
+        "name": "Samsung Fold Z 5",
+        "price": "150000",
+        "category": "Mobile",
+        "color": "Light Blue",
+        "description": "Samsung Fold Z 5 phone here",
+        "image": "https://5.imimg.com/data5/SELLER/Default/2023/9/343575179/GR/IC/GD/41607506/71xwxwxa6ql-sl1500-1.jpg"
+      },
+      {
+        "id": "0d92",
+        "name": "Samsung Flip 5",
+        "price": "129000",
+        "category": "Mobile",
+        "color": "Mint",
+        "description": "Samsung Flip 5 phone here",
+        "image": "https://images.samsung.com/levant/smartphones/galaxy-z-flip5/buy/product_color_mint.png"
+      },
+      {
+        "name": "Nike Jordan",
+        "price": "10999",
+        "category": "Shoes",
+        "color": "Black",
+        "description": "Nike JOrdan here",
+        "image": "https://i5.walmartimages.com/asr/9934350a-44bd-4dbd-bf61-146541233161.97aaf0944fb64c262a6a6051e5a225c2.jpeg",
+        "id": "b6d3"
+      },
+      {
+        "id": "de5a",
+        "name": "Nike & Louis Vuitton Air Force 1 ",
+        "price": "226000",
+        "category": "Shoes",
+        "color": "White",
+        "description": "Nike & Louis Vuitton Air Force 1 here",
+        "image": "https://in.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-louis-vuitton-and-nike-%22air-force-1%22-by-virgil-abloh---white-/-white---white--BM9U1PMX01_PM2_Front%20view.png?wid=1090&hei=1090"
+      },
+      {
+        "id": "af6a",
+        "name": "LV Trainer Sneaker",
+        "price": "116000",
+        "category": "Shoes",
+        "color": "Blue",
+        "description": "LV Trainer Sneakerhere",
+        "image": "https://in.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-lv-trainer-sneaker--BM9U5PMI20_PM2_Front%20view.png?wid=1090&hei=1090"
+      }
+    ],
+    "users": [
+      {
+        "id": "cf37",
+        "name": "ABCD",
+        "email": "abc@user.com",
+        "password": "abc@123"
+      },
+      {
+        "id": "3977",
+        "name": "Jhon Parker",
+        "email": "jhon@user.com",
+        "password": "jhon@123"
+      },
+      {
+        "id": "247e",
+        "name": "Jhony Walker",
+        "email": "jhony@user.com",
+        "password": "jhon@123"
+      },
+      {
+        "id": "1447",
+        "name": "user A",
+        "email": "user@user.com",
+        "password": "jhon@123"
+      },
+      {
+        "id": "c351",
+        "name": "Second",
+        "email": "second@gmail.com",
+        "password": "usersecond.123"
+      },
+      {
+        "id": "c38b",
+        "name": "Parker Jhony",
+        "email": "parker@jhon.com",
+        "password": "jhon@123"
+      },
+      {
+        "id": "4641",
+        "name": "Anil Mahajan",
+        "email": "anil@mahajan.com",
+        "password": "anil@123"
+      },
+      {
+        "id": "d7d8",
+        "name": "Dhruv Moradiya",
+        "email": "dhruv@user.com",
+        "password": "dhruv@123"
+      },
+      {
+        "id": "e5ae",
+        "name": "Shubh",
+        "email": "shubh@user.com",
+        "password": "shubh.1234"
+      }
+    ],
+    "cart": [],
+    "orders": [
+      {
+        "id": "b1a5",
+        "fullName": "Dhruv Moradiya",
+        "email": "dhruv@user.com",
+        "phonenumber": "091044061",
+        "address": "45, Varachha",
+        "city": "Goa",
+        "zipCode": "34576",
+        "country": "India",
+        "priceSummary": 85600,
+        "userId": "d7d8"
+      },
+      {
+        "id": "55a9",
+        "fullName": "Dhruv Moradiya",
+        "email": "dhruv@user.com",
+        "phonenumber": "9467368734",
+        "address": "Thailand",
+        "city": "Bangkok",
+        "zipCode": "45478",
+        "country": "Thailand",
+        "priceSummary": 152100,
+        "userId": "d7d8"
+      }
+    ]
+  }

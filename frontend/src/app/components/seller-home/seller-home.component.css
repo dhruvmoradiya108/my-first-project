@@ -1,0 +1,50 @@
+table{
+    text-align: left;
+    color: brown;
+    border-collapse: collapse;
+}
+
+.header-button {
+    display: flex;
+    flex-direction: row;
+    margin-top: 50px;
+}
+
+h1 {
+    color: brown;
+}
+
+.fa-plus {
+    margin-left: 50px;
+    padding-top: 34px;
+}
+
+
+img {
+    height: 100px;
+    width: 100px;
+}
+
+table td {
+    border: 1px solid brown;
+    padding: 10px;
+    min-width: auto;
+}
+
+table th {
+    font-weight: 900;
+    border: 1px solid brown;
+    padding: 10px;
+    min-width: auto;
+    font-size: large;
+}
+
+.delete-button {
+    margin-right: 10px;
+  }
+
+fa-icon {
+    cursor: pointer;
+    color: brown;
+}
+

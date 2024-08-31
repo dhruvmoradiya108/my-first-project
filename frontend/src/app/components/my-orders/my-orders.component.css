@@ -1,0 +1,52 @@
+.my-orders {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .order-header,
+  .order-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+    font-family: Arial, sans-serif;
+  }
+  
+  .order-header {
+    font-weight: bold;
+    background-color: #f7f7f7;
+  }
+  
+  .order-column {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .order-img {
+    max-width: 80px;
+    height: auto;
+  }
+  
+  .cancel-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cancel-button:hover {
+    background-color: #ff1a1a;
+  }
+  
+  
