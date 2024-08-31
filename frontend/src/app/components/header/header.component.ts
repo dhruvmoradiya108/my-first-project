@@ -48,31 +48,72 @@ export class HeaderComponent implements OnInit {
     })
   }
 
+  // menuTypeFun() {
+  //   this.router.events.subscribe((value: any) => {
+  //     if (value.url) {
+  //       // console.warn((value.url));
+  //       if (localStorage.getItem('loggedSeller') && value.url.includes('seller')) {
+  //         let sellerStore = localStorage.getItem('loggedSeller');
+  //         let storageSellerData = sellerStore && JSON.parse(sellerStore)[0];
+  //         console.log(storageSellerData.name[0])
+  //         this.sellerName = storageSellerData.name;
+  //         this.menuType = 'seller'
+  //       } else if (value.url.includes('sell-auth')) {
+  //         this.menuType = 'sellerlogin'
+  //       } else if (localStorage.getItem('loggedUser')) {
+  //         let userStore = localStorage.getItem('loggedUser');
+  //         let storageUserData = userStore && JSON.parse(userStore)[0];
+  //         this.userName = storageUserData.name;
+  //         this.menuType = 'user';
+  //         this.product.getCartList(storageUserData.id)
+  //       }
+  //       else {
+  //         this.menuType = 'default'
+  //       }
+  //     }
+  //   })
+
+  // }
+
   menuTypeFun() {
     this.router.events.subscribe((value: any) => {
       if (value.url) {
-        // console.warn((value.url));
         if (localStorage.getItem('loggedSeller') && value.url.includes('seller')) {
           let sellerStore = localStorage.getItem('loggedSeller');
-          let storageSellerData = sellerStore && JSON.parse(sellerStore)[0];
-          this.sellerName = storageSellerData.name;
-          this.menuType = 'seller'
+          if (sellerStore) {
+            let storageSellerData = JSON.parse(sellerStore);
+            if (storageSellerData && storageSellerData.name) {
+              this.sellerName = storageSellerData.name;
+              this.menuType = 'seller';
+            } else {
+              console.warn('Seller data does not have a name property');
+            }
+          } else {
+            console.warn('No seller data found in local storage');
+          }
         } else if (value.url.includes('sell-auth')) {
-          this.menuType = 'sellerlogin'
+          this.menuType = 'sellerlogin';
         } else if (localStorage.getItem('loggedUser')) {
           let userStore = localStorage.getItem('loggedUser');
-          let storageUserData = userStore && JSON.parse(userStore)[0];
-          this.userName = storageUserData.name;
-          this.menuType = 'user';
-          this.product.getCartList(storageUserData.id)
-        }
-        else {
-          this.menuType = 'default'
+          if (userStore) {
+            let storageUserData = JSON.parse(userStore);
+            if (storageUserData && storageUserData.name) {
+              this.userName = storageUserData.name;
+              this.menuType = 'user';
+              this.product.getCartList(storageUserData.id);
+            } else {
+              console.warn('User data does not have a name property');
+            }
+          } else {
+            console.warn('No user data found in local storage');
+          }
+        } else {
+          this.menuType = 'default';
         }
       }
-    })
-
+    });
   }
+
 
   onLogout() {
     localStorage.removeItem('loggedSeller')

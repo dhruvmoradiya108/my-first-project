@@ -43,7 +43,6 @@ app.post("/signup", (req, res) => {
   });
 });
 
-
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -82,8 +81,7 @@ app.post("/userSignUp", (req, res) => {
       res.status(201).json({ message: "User registered successfully" });
     });
   });
-})
-
+});
 
 app.post("/userLogin", (req, res) => {
   const { email, password } = req.body;
@@ -100,8 +98,109 @@ app.post("/userLogin", (req, res) => {
     // Login successful
     res.status(200).json({ message: "Login successful", seller: result[0] });
   });
-})
+});
 
+// Add Product
+app.post("/products", (req, res) => {
+  const product = req.body;
+  const sql = "INSERT INTO products SET ?";
+  db.query(sql, product, (err, result) => {
+    if (err) throw err;
+    res.send("Product added");
+  });
+});
+
+// Get Product List
+app.get("/products", (req, res) => {
+  const sql = "SELECT * FROM products";
+  db.query(sql, (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
+});
+
+// Delete Product
+app.delete("/products/:id", (req, res) => {
+  const sql = "DELETE FROM products WHERE id = ?";
+  db.query(sql, [req.params.id], (err, result) => {
+    if (err) throw err;
+    res.send("Product deleted");
+  });
+});
+
+// Get Single Product
+app.get("/products/:id", (req, res) => {
+  const sql = "SELECT * FROM products WHERE id = ?";
+  db.query(sql, [req.params.id], (err, result) => {
+    if (err) throw err;
+    res.json(result[0]);
+  });
+});
+
+// Update Product
+app.put("/products/:id", (req, res) => {
+  const sql = "UPDATE products SET ? WHERE id = ?";
+  db.query(sql, [req.body, req.params.id], (err, result) => {
+    if (err) throw err;
+    res.send("Product updated");
+  });
+});
+
+// Add to Cart
+app.post("/cart", (req, res) => {
+  const cartItem = req.body;
+  const sql = "INSERT INTO cart SET ?";
+  db.query(sql, cartItem, (err, result) => {
+    if (err) throw err;
+    res.send("Item added to cart");
+  });
+});
+
+// Get Cart List
+app.get("/cart", (req, res) => {
+  const sql = "SELECT * FROM cart WHERE userId = ?";
+  db.query(sql, [req.query.userId], (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
+});
+
+// Remove from Cart
+app.delete("/cart/:id", (req, res) => {
+  const sql = "DELETE FROM cart WHERE id = ?";
+  db.query(sql, [req.params.id], (err, result) => {
+    if (err) throw err;
+    res.send("Item removed from cart");
+  });
+});
+
+// Place Order
+app.post("/orders", (req, res) => {
+  const order = req.body;
+  const sql = "INSERT INTO orders SET ?";
+  db.query(sql, order, (err, result) => {
+    if (err) throw err;
+    res.send("Order placed");
+  });
+});
+
+// Get Order List
+app.get("/orders", (req, res) => {
+  const sql = "SELECT * FROM orders WHERE userId = ?";
+  db.query(sql, [req.query.userId], (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
+});
+
+// Cancel Order
+app.delete("/orders/:id", (req, res) => {
+  const sql = "DELETE FROM orders WHERE id = ?";
+  db.query(sql, [req.params.id], (err, result) => {
+    if (err) throw err;
+    res.send("Order canceled");
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
