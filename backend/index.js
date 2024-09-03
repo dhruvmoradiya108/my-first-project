@@ -101,22 +101,31 @@ app.post("/userLogin", (req, res) => {
 });
 
 // Add Product
-app.post('/products', (req, res) => {
+app.post("/products", (req, res) => {
   // Destructure the incoming request body
-  const { name, price, description, image, color, category, sellerId, sellerName } = req.body;
+  const {
+    name,
+    price,
+    description,
+    image,
+    color,
+    category,
+    sellerId,
+    sellerName,
+  } = req.body;
 
   // Construct the product object
   const product = {
-      name,
-      price,
-      description,
-      image,
-      color,
-      category,
-      seller_id: sellerId,  // Ensure this matches your DB column name
-      seller_name: sellerName,  // Ensure this matches your DB column name
-      created_at: new Date(),
-      updated_at: new Date()
+    name,
+    price,
+    description,
+    image,
+    color,
+    category,
+    seller_id: sellerId, // Ensure this matches your DB column name
+    seller_name: sellerName, // Ensure this matches your DB column name
+    created_at: new Date(),
+    updated_at: new Date(),
   };
 
   // SQL query to insert the product
@@ -124,19 +133,20 @@ app.post('/products', (req, res) => {
 
   // Execute the query
   db.query(sql, product, (err, result) => {
-      if (err) {
-          // Log the error for debugging purposes
-          console.error('Error adding product:', err);
+    if (err) {
+      // Log the error for debugging purposes
+      console.error("Error adding product:", err);
 
-          // Send a 500 status with a detailed message
-          return res.status(500).json({ message: "Failed to add product", error: err.message });
-      }
+      // Send a 500 status with a detailed message
+      return res
+        .status(500)
+        .json({ message: "Failed to add product", error: err.message });
+    }
 
-      // Send a success response
-      res.status(200).json({ message: "Product added successfully", result });
+    // Send a success response
+    res.status(200).json({ message: "Product added successfully", result });
   });
 });
-
 
 // Get Product List
 app.get("/products", (req, res) => {
@@ -148,11 +158,30 @@ app.get("/products", (req, res) => {
 });
 
 // Delete Product
+// app.delete("/products/:id", (req, res) => {
+//   const sql = "DELETE FROM products WHERE id = ?";
+//   db.query(sql, [req.params.id], (err, result) => {
+//     if (err) throw err;
+//     res.send("Product deleted");
+//   });
+// });
+
 app.delete("/products/:id", (req, res) => {
+  const id = req.params.id;
   const sql = "DELETE FROM products WHERE id = ?";
-  db.query(sql, [req.params.id], (err, result) => {
-    if (err) throw err;
-    res.send("Product deleted");
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Error deleting product" });
+    }
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+    }
+    res.json({ success: true, message: "Product deleted successfully" });
   });
 });
 
