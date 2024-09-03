@@ -18,6 +18,8 @@ export interface product {
     id: number,
     quantity: number | undefined
     productId: number | undefined
+    sellerId?: number;
+    sellerName?: string;
 }
 
 export interface cart {

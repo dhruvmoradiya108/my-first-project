@@ -17,15 +17,41 @@ export class SellerAddProductComponent {
   product = inject(ProductService)
   router = inject(Router)
 
-  onSubmitAddProductForm(data : product) {
-    this.product.addProduct(data).subscribe((result : any) => {
-      console.log(result)
-      if(result){
-        this.addProductMessage = "Product is added successfully."
+  // onSubmitAddProductForm(data : product) {
+  //   this.product.addProduct(data).subscribe((result : any) => {
+  //     console.log(result)
+  //     if(result){
+  //       this.addProductMessage = "Product is added successfully."
+  //     }
+  //   })
+  //   setTimeout (() => {
+  //     this.addProductMessage = undefined
+  //   }, 3000); 
+  // }
+
+  onSubmitAddProductForm(data: product) {
+    const seller = localStorage.getItem('loggedSeller');
+    const sellerData = seller && JSON.parse(seller);
+
+    if (sellerData) {
+      data.sellerId = sellerData.id;
+      data.sellerName = sellerData.name;
+    }
+
+    this.product.addProduct(data).subscribe({
+      next: (result: any) => {
+        console.log(result);
+        this.addProductMessage = "Product added successfully."
+        this.router.navigate(['seller-home']);
+      },
+      error: (error) => {
+        console.error('Error adding product:', error);
+        this.addProductMessage = "Failed to add product.";
       }
-    })
-    setTimeout (() => {
-      this.addProductMessage = undefined
-    }, 3000); 
+    });
+
+    setTimeout(() => {
+      this.addProductMessage = undefined;
+    }, 3000);
   }
 }

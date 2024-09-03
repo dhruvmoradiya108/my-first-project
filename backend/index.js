@@ -101,14 +101,42 @@ app.post("/userLogin", (req, res) => {
 });
 
 // Add Product
-app.post("/products", (req, res) => {
-  const product = req.body;
+app.post('/products', (req, res) => {
+  // Destructure the incoming request body
+  const { name, price, description, image, color, category, sellerId, sellerName } = req.body;
+
+  // Construct the product object
+  const product = {
+      name,
+      price,
+      description,
+      image,
+      color,
+      category,
+      seller_id: sellerId,  // Ensure this matches your DB column name
+      seller_name: sellerName,  // Ensure this matches your DB column name
+      created_at: new Date(),
+      updated_at: new Date()
+  };
+
+  // SQL query to insert the product
   const sql = "INSERT INTO products SET ?";
+
+  // Execute the query
   db.query(sql, product, (err, result) => {
-    if (err) throw err;
-    res.send("Product added");
+      if (err) {
+          // Log the error for debugging purposes
+          console.error('Error adding product:', err);
+
+          // Send a 500 status with a detailed message
+          return res.status(500).json({ message: "Failed to add product", error: err.message });
+      }
+
+      // Send a success response
+      res.status(200).json({ message: "Product added successfully", result });
   });
 });
+
 
 // Get Product List
 app.get("/products", (req, res) => {
