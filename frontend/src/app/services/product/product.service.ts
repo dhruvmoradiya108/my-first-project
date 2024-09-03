@@ -152,7 +152,7 @@ export class ProductService {
   }
 
   popularProduct() {
-    return this.http.get<product[]>(`${this.apiUrl}/products?_limit=3`);
+    return this.http.get<product[]>(`${this.apiUrl}/products?_limit=8`);
   }
 
   trendyProduct() {
