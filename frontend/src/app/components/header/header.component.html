@@ -53,7 +53,7 @@
             <fa-icon [icon]="faList12"> </fa-icon><a routerLink="my-orders">My Orders</a>
           </li>
           <li>
-            <fa-icon [icon]="faShoppingCart"></fa-icon><a [routerLink]="cartItems>0?'cart-page':null">Cart({{ cartItems }})</a>
+            <fa-icon [icon]="faShoppingCart"></fa-icon><a [routerLink]="cartItems>=0?'cart-page':null">Cart({{ cartItems }})</a>
           </li>
         </ul>
         <ul *ngSwitchCase="'seller'">
