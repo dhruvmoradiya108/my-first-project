@@ -30,7 +30,7 @@ app.post("/signup", (req, res) => {
   db.query(checkEmailQuery, [email], (err, result) => {
     if (err) throw err;
     if (result.length > 0) {
-      return res.status(400).json({ error: "Email already exists" });
+      return res.status(200).json({ error: "Email already exists" });
     }
 
     // Insert new seller into the database
@@ -52,7 +52,7 @@ app.post("/login", (req, res) => {
   db.query(checkEmailQuery, [email, password], (err, result) => {
     if (err) throw err;
     if (result.length === 0) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      return res.status(200).json({ error: "Invalid email or password" });
     }
 
     // Login successful
@@ -70,7 +70,7 @@ app.post("/userSignUp", (req, res) => {
   db.query(checkEmailQuery, [email], (err, result) => {
     if (err) throw err;
     if (result.length > 0) {
-      return res.status(400).json({ error: "Email already exists" });
+      return res.status(200).json({ error: "Email already exists" });
     }
 
     // Insert new user into the database
@@ -92,7 +92,7 @@ app.post("/userLogin", (req, res) => {
   db.query(checkEmailQuery, [email, password], (err, result) => {
     if (err) throw err;
     if (result.length === 0) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      return res.status(200).json({ error: "Invalid email or password" });
     }
 
     // Login successful
