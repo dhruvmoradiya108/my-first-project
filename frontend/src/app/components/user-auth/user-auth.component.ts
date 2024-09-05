@@ -24,10 +24,14 @@ export class UserAuthComponent {
 
 
 
-  onUserSignup(userSignUpdata : signUp){
-    this.service.userSignUp(userSignUpdata).subscribe((res) => {
-      if(res) {
+  onUserSignup(userSignUpdata: signUp) {
+    this.service.userSignUp(userSignUpdata).subscribe((res: any) => {
+      if (res) {
         console.log('Signup Successfully.', res)
+        // localStorage.setItem('loggedUser', JSON.stringify(res));
+        const { id, name, email, password } = res.seller;
+        const loggedUser = { id, name, email, password };
+        localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
         this.router.navigate(['']);
       } else {
         console.error('Error occurred while signing up.')
@@ -35,10 +39,14 @@ export class UserAuthComponent {
     })
   }
 
-  onUserLogin(userLogindata : signUp){
-    this.service.userLogin(userLogindata).subscribe((res) => {
-      if(res) {
+  onUserLogin(userLogindata: signUp) {
+    this.service.userLogin(userLogindata).subscribe((res: any) => {
+      if (res) {
         console.log('Login Successfully.', res)
+        // localStorage.setItem('loggedUser', JSON.stringify(res));
+        const { id, name, email, password } = res.seller;
+        const loggedUser = { id, name, email, password };
+        localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
         this.router.navigate(['']);
       } else {
         console.error('Error occurred while logging in.')

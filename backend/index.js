@@ -203,31 +203,60 @@ app.put("/products/:id", (req, res) => {
   });
 });
 
-// Add to Cart
 app.post("/cart", (req, res) => {
-  const cartItem = req.body;
+  const { userId, productId, name, price, image, quantity } = req.body;
+
+  const cartItem = {
+    userId,
+    productId,
+    name,
+    price,
+    image,
+    quantity,
+  };
+
   const sql = "INSERT INTO cart SET ?";
+
   db.query(sql, cartItem, (err, result) => {
-    if (err) throw err;
-    res.send("Item added to cart");
+    if (err) {
+      console.error("Error inserting item into cart:", err);
+      return res
+        .status(500)
+        .json({ message: "Server Error: Unable to add item to cart." });
+    }
+    res.json({ message: "Item added to cart" });
   });
 });
 
 // Get Cart List
 app.get("/cart", (req, res) => {
+  const userId = req.query.userId;
   const sql = "SELECT * FROM cart WHERE userId = ?";
-  db.query(sql, [req.query.userId], (err, results) => {
-    if (err) throw err;
+  db.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.error("Error fetching cart items:", err);
+      return res
+        .status(500)
+        .json({ message: "Server Error: Unable to fetch cart items." });
+    }
     res.json(results);
   });
 });
 
 // Remove from Cart
 app.delete("/cart/:id", (req, res) => {
+  const { id } = req.params;
+
   const sql = "DELETE FROM cart WHERE id = ?";
-  db.query(sql, [req.params.id], (err, result) => {
-    if (err) throw err;
-    res.send("Item removed from cart");
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("Error deleting item from cart:", err);
+      return res
+        .status(500)
+        .json({ message: "Server Error: Unable to remove item from cart." });
+    }
+    res.json({ message: "Item removed from cart" });
   });
 });
 

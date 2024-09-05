@@ -23,7 +23,7 @@ export class CartPageComponent implements OnInit {
     delivery: 0,
     total: 0
   }
-  
+
 
   ngOnInit(): void {
     this.loadDetails();
@@ -40,29 +40,41 @@ export class CartPageComponent implements OnInit {
     this.router.navigate(['/checkout'])
   }
 
-  loadDetails(){
-    this.product.currentCart().subscribe((res) => {
-      this.cartData = res;
-      console.warn(this.cartData);
-      let price = 0;
-      res.forEach((item) => {
-        if (item.quantity) {
-          price = price + (+item.price * +item.quantity)
-          //Using this "(+item.price)" we are convert string to the number
+  loadDetails() {
+    const user = localStorage.getItem('loggedUser');
+    if (user) {
+      const userId = JSON.parse(user).id;
+      this.product.getCartList(userId).subscribe({
+        next: (res) => {
+          this.cartData = res;
+          console.warn(this.cartData);
+
+          let price = 0;
+          this.cartData.forEach((item) => {
+            if (item.quantity) {
+              price += (+item.price * +item.quantity);
+            }
+          });
+          this.priceSummary.price = price;
+          this.priceSummary.discount = price * 10 / 100;
+          this.priceSummary.delivery = 100;
+          this.priceSummary.tax = price * 5 / 100;
+          this.priceSummary.total = price + (price * 5 / 100) + 100 - (price * 10 / 100);
+
+          if (!this.cartData.length) {
+            this.router.navigate(['/']);
+          }
+        },
+        error: (err) => {
+          console.error('Error loading cart details:', err);
+          // Handle error appropriately here
         }
-      })
-      this.priceSummary.price = price;
-      this.priceSummary.discount = price * 10 / 100;
-      this.priceSummary.delivery = 100;
-      this.priceSummary.tax = price * 5 / 100;
-      this.priceSummary.total = price + (price * 5 / 100) + 100 - (price * 10 / 100);
-
-    if(!this.cartData.length){
-      this.router.navigate(['/'])
+      });
+    } else {
+      console.error('No user logged in.');
+      this.router.navigate(['/']);
     }
-
-    })
   }
 
-  
+
 }

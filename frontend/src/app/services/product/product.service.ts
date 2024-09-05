@@ -118,6 +118,7 @@
 import { EventEmitter, inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { cart, order, product } from '../../../data-type';
+import { catchError, map, Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -194,27 +195,42 @@ export class ProductService {
 
   getCartList(userId: number) {
     return this.http
-      .get<product[]>(`${this.apiUrl}/cart?userId=` + userId, {
-        observe: 'response',
+      .get<cart[]>(`${this.apiUrl}/cart?userId=${userId}`)
+      .pipe(
+        // Handle the response and error properly
+        catchError(error => {
+          console.error('Error fetching cart list:', error);
+          return throwError(() => new Error('Error fetching cart list'));
+        })
+      );
+  }
+
+
+  // removeToCart(cartId: number) {
+  //   return this.http.delete(`${this.apiUrl}/cart/${cartId}`);
+  // }
+  removeToCart(cartItemId: number) {
+    return this.http.delete(`${this.apiUrl}/cart/${cartItemId}`);
+  }
+  
+  currentCart(): Observable<cart[]> {
+    return this.http.get<cart[]>(`${this.apiUrl}/cart`).pipe(
+      map(cartItems => {
+        console.log('Raw cart items from API:', cartItems); // Log the raw API response
+        return cartItems.map(item => {
+          if (!item.id) {
+            console.warn('Item without ID found in cart:', item);
+          }
+          return item;
+        });
+      }),
+      catchError(error => {
+        console.error('Error fetching cart data:', error);
+        return throwError(() => new Error('Failed to fetch cart data.'));
       })
-      .subscribe((res) => {
-        if (res && res.body) {
-          this.cartData.emit(res.body);
-        }
-      });
-  }
-
-  removeToCart(cartId: number) {
-    return this.http.delete(`${this.apiUrl}/cart/${cartId}`);
-  }
-
-  currentCart() {
-    let userStore = localStorage.getItem('loggedUser');
-    let storageUserData = userStore && JSON.parse(userStore)[0];
-    return this.http.get<cart[]>(
-      `${this.apiUrl}/cart?userId=` + storageUserData.id
     );
   }
+
 
   onPlaceOrder(data: order) {
     return this.http.post(`${this.apiUrl}/orders`, data);

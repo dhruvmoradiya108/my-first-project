@@ -24,40 +24,87 @@ export class ProductDetailsComponent implements OnInit {
   removeCart: boolean = false;
   cartData: product | undefined;
 
+  // ngOnInit(): void {
+  //   let productId = this.activateRoute.snapshot.paramMap.get('productId')
+  //   console.log(productId);
+  //   productId && this.product.getProduct(productId).subscribe((res) => {
+  //     console.log(res);
+  //     this.productData = res;
+  //     let cartData = localStorage.getItem('localCart')
+  //     if (productId && cartData) {
+  //       let items = JSON.parse(cartData);
+  //       items = items.filter((item: product) => productId === item.id.toString());
+  //       // console.log("items", items);
+  //       if (items.length) {
+  //         this.removeCart = true;
+  //       } else {
+  //         this.removeCart = false
+  //       }
+  //     }
+
+  //     let user = localStorage.getItem('loggedUser');
+  //     if (user) {
+  //       let userId = user && JSON.parse(user)[0].id;
+  //       this.product.getCartList(userId);
+
+  //       this.product.cartData.subscribe((res) => {
+  //         let item = res.filter((item: product) => productId?.toString() === item.productId?.toString())
+
+  //         if (item.length) {
+  //           this.cartData = item[0]
+  //           this.removeCart = true;
+  //         }
+  //       })
+  //     }
+  //   })
+  // }
+
   ngOnInit(): void {
-    let productId = this.activateRoute.snapshot.paramMap.get('productId')
+    let productId = this.activateRoute.snapshot.paramMap.get('productId');
     // console.log(productId);
-    productId && this.product.getProduct(productId).subscribe((res) => {
-      // console.log(res);
-      this.productData = res;
-      let cartData = localStorage.getItem('localCart')
-      if (productId && cartData) {
-        let items = JSON.parse(cartData);
-        items = items.filter((item: product) => productId === item.id.toString());
-        // console.log("items", items);
-        if (items.length) {
-          this.removeCart = true;
-        } else {
-          this.removeCart = false
-        }
-      }
 
-      let user = localStorage.getItem('loggedUser');
-      if (user) {
-        let userId = user && JSON.parse(user)[0].id;
-        this.product.getCartList(userId);
+    if (productId) {
+      this.product.getProduct(productId).subscribe((res) => {
+        if (res) {
+          this.productData = res;
+          // console.log('Product Data:', this.productData);
 
-        this.product.cartData.subscribe((res) => {
-          let item = res.filter((item: product) => productId?.toString() === item.productId?.toString())
-
-          if (item.length) {
-            this.cartData = item[0]
-            this.removeCart = true;
+          // Handling local cart data
+          let cartData = localStorage.getItem('localCart');
+          if (cartData) {
+            let items = JSON.parse(cartData);
+            items = items.filter((item: product) => item.id?.toString() === productId);
+            if (items.length) {
+              this.removeCart = true;
+            } else {
+              this.removeCart = false;
+            }
           }
-        })
-      }
-    })
+
+          // Handling logged in user and cart data
+          let user = localStorage.getItem('loggedUser');
+          if (user) {
+            let userId = JSON.parse(user)?.id;
+            if (userId) {
+              this.product.getCartList(userId);
+              this.product.cartData.subscribe((cartItems) => {
+                let item = cartItems.find((cartItem: product) => cartItem.productId?.toString() === productId);
+                if (item) {
+                  this.cartData = item;
+                  this.removeCart = true;
+                }
+              });
+            }
+          }
+        } else {
+          console.error('Product not found');
+        }
+      });
+    } else {
+      console.error('Invalid product ID');
+    }
   }
+
 
   handleQuantity(value: string) {
     if (this.productQuantity < 20 && value === 'plus') {
@@ -67,51 +114,89 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
+
   onAddToCart() {
     if (this.productData) {
       this.productData.quantity = this.productQuantity;
 
-      if (!localStorage.getItem('loggedUser')) {
-        this.product.localAddToCart(this.productData)
+      const loggedUser = localStorage.getItem('loggedUser');
+
+      if (!loggedUser) {
+        this.product.localAddToCart(this.productData);
         this.removeCart = true;
       } else {
-        // this.product.localAddToCart(this.productData)
-        let user = localStorage.getItem('loggedUser');
-        // console.warn(user);
-        let userId = user && JSON.parse(user)[0].id;
-        // console.log(userId);
-        let cartData: cart = {
-          ...this.productData,
-          productId: this.productData.id,
-          userId
-        }
-        // console.warn(cartData);
-        delete cartData.id;
-        this.product.addToCart(cartData).subscribe((res) => {
-          if (res) {
-            // alert("Product is Added into the cart.")
-            this.product.getCartList(userId)
-            this.removeCart = true;
-          }
-        })
+        const user = JSON.parse(loggedUser);
+        const userId = user?.id;
 
+        if (userId) {
+          const cartData: cart = {
+            userId: userId,
+            productId: this.productData.id,
+            name: this.productData.name,
+            price: this.productData.price,
+            image: this.productData.image,
+            quantity: this.productQuantity
+          };
+
+          this.product.addToCart(cartData).subscribe({
+            next: (res) => {
+              console.log("Product added to cart:", res);
+              this.product.getCartList(userId);
+              this.removeCart = true;
+            },
+            error: (err) => {
+              if (err.error.text === 'Item added to cart') {
+                console.log("Product added to cart successfully.");
+                this.product.getCartList(userId);
+                this.removeCart = true;
+              } else {
+                console.error("Error adding product to cart:", err);
+              }
+            }
+          });
+
+        } else {
+          console.error('User ID not found in localStorage');
+        }
       }
-      // console.warn(this.productData);
     }
   }
+
+
 
   onRemoveFromCart(productId: number) {
     if (!localStorage.getItem('loggedUser')) {
       this.product.localRemoveFromCart(productId)
     } else {
       this.cartData && this.product.removeToCart(this.cartData.id)
-      .subscribe((res) => {
-        let user = localStorage.getItem('loggedUser');
-        let userId = user && JSON.parse(user)[0].id;
-        this.product.getCartList(userId)
-      })
-    } 
+        .subscribe((res) => {
+          let user = localStorage.getItem('loggedUser');
+          let userId = user && JSON.parse(user)[0].id;
+          this.product.getCartList(userId)
+        })
+    }
     this.removeCart = false
   }
 
+
+  // onRemoveFromCart(productId: number) {
+  //   if (!localStorage.getItem('loggedUser')) {
+  //     this.product.localRemoveFromCart(productId);
+  //   } else {
+  //     this.cartData && this.product.removeToCart(this.cartData.id).subscribe({
+  //       next: (res) => {
+  //         console.log("Response from server:", res);
+  //         let user = localStorage.getItem('loggedUser');
+  //         let userId = user && JSON.parse(user)[0].id;
+  //         this.product.getCartList(userId);
+  //       },
+  //       error: (err) => {
+  //         console.error("Error removing product from cart:", err);
+  //       }
+  //     });
+  //   }
+  // }
 }
+
+
+
