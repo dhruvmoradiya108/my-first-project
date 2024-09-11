@@ -1,3 +1,4 @@
+// checkout.component.ts
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../services/product/product.service';
@@ -25,6 +26,7 @@ export class CheckoutComponent implements OnInit {
     total: 0
   };
   orderMsg: string | undefined;
+  // userId: number | undefined;
 
   ngOnInit(): void {
     this.product.currentCart().subscribe((res) => {
@@ -60,16 +62,28 @@ export class CheckoutComponent implements OnInit {
     }, error => {
       console.error('Error fetching cart data:', error);
     });
+
+    // Retrieve userId from localStorage
+    // const user = localStorage.getItem('loggedUser');
+    // if (user) {
+    //   const parsedUser = JSON.parse(user);
+    //   this.userId = parsedUser && parsedUser[0] ? parsedUser[0].id : undefined;
+    // }
   }
-
-
 
   onPlaceOrder(data: orderUserInformation) {
     let user = localStorage.getItem('loggedUser');
     let userId: number | undefined;
+
     if (user) {
-      let parsedUser = JSON.parse(user);
-      userId = parsedUser && parsedUser[0] ? parsedUser[0].id : undefined;
+      try {
+        let parsedUser = JSON.parse(user);
+        userId = parsedUser.id; // Access 'id' directly
+        console.warn(userId);
+
+      } catch (e) {
+        console.error('Error parsing user data from localStorage:', e);
+      }
     }
 
     if (userId === undefined) {
@@ -80,30 +94,30 @@ export class CheckoutComponent implements OnInit {
     if (this.priceSummary) {
       let orderData: order = {
         ...data,
-        priceSummary: this.priceSummary.total,
         userId,
+        priceSummary: this.priceSummary.total,
+        paymentMethod: 'Cash on Delivery',
+        orderDate: new Date(), // Optional: Add order date
         id: undefined
       };
 
-      if (this.cartData) {
-        this.cartData.forEach((item: any) => {
-          if (item.id) {
+      this.product.onPlaceOrder(orderData).subscribe(
+        (result) => {
+          if (result.message) {
+            this.orderMsg = result.message;  // Display message from response
             setTimeout(() => {
-              this.product.deleteCartItems(item.id).unsubscribe(); // Ensure you handle the observable
-            }, 700);
+              this.orderMsg = undefined;
+              this.router.navigate(['/my-orders']);
+            }, 4000);
+          } else {
+            this.orderMsg = "Order placed, but no message received.";
           }
-        });
-      }
-
-      this.product.onPlaceOrder(orderData).subscribe((result) => {
-        if (result) {
-          this.orderMsg = "Order has been placed";
-          setTimeout(() => {
-            this.orderMsg = undefined;
-            this.router.navigate(['/my-orders']);
-          }, 4000);
+        },
+        (error) => {
+          console.error('Order placement failed:', error);
+          this.orderMsg = "Failed to place order. Please try again.";
         }
-      });
+      );
     }
   }
 }

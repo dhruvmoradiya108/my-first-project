@@ -46,31 +46,25 @@ export interface priceSummary {
 export interface orderUserInformation {
     fullname: string,
     email: string,
-    contactno: string,
+    phonenumber: string,
     address: string,
     city: string,
     zipcode: number,
-    country: string,
-    cardNumber: number,
-    cardName: string,
-    expiryDate: string,
-    cvv: number
+    country: string
 }
 
 export interface order {
     fullname: string,
     email: string,
     address: string,
-    contactno: string,
+    phonenumber: string,
     priceSummary: number,
+    paymentMethod: string,
     userId: number | undefined,
     id: number | undefined,
     city: string,
     zipcode: number,
     country: string,
-    cardNumber: number,
-    cardName: string,
-    expiryDate: string,
-    cvv: number
+    orderDate: Date
 }
 

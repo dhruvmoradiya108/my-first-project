@@ -263,10 +263,17 @@ app.delete("/cart/:id", (req, res) => {
 // Place Order
 app.post("/orders", (req, res) => {
   const order = req.body;
+  const formattedDate = new Date().toISOString().slice(0, 19).replace("T", " ");
+  order.orderDate = formattedDate;
+
   const sql = "INSERT INTO orders SET ?";
   db.query(sql, order, (err, result) => {
-    if (err) throw err;
-    res.send("Order placed");
+    if (err) {
+      console.error("Error placing order:", err);
+      return res.status(500).json({ message: "Error placing order" });
+    }
+    console.log("Order placed:", result);
+    res.status(200).json({ message: "Order placed" });
   });
 });
 
@@ -274,8 +281,12 @@ app.post("/orders", (req, res) => {
 app.get("/orders", (req, res) => {
   const sql = "SELECT * FROM orders WHERE userId = ?";
   db.query(sql, [req.query.userId], (err, results) => {
-    if (err) throw err;
-    res.json(results);
+    if (err) {
+      console.error("Error fetching orders:", err);
+      res.status(500).send("Error fetching orders");
+    } else {
+      res.json(results);
+    }
   });
 });
 
@@ -283,8 +294,12 @@ app.get("/orders", (req, res) => {
 app.delete("/orders/:id", (req, res) => {
   const sql = "DELETE FROM orders WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
-    if (err) throw err;
-    res.send("Order canceled");
+    if (err) {
+      console.error("Error canceling order:", err);
+      res.status(500).send("Error canceling order");
+    } else {
+      res.send("Order canceled");
+    }
   });
 });
 

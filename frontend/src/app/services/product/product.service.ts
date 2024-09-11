@@ -131,7 +131,7 @@ export class ProductService {
 
   private apiUrl = 'http://localhost:5000';
 
-  constructor(){
+  constructor() {
     this.loadInitialCartData();
   }
 
@@ -195,48 +195,6 @@ export class ProductService {
     }
   }
 
-  // addToCart(cartData: cart) {
-  //   return this.http.post(`${this.apiUrl}/cart`, cartData);
-  // }
-
-  // getCartList(userId: number) {
-  //   return this.http
-  //     .get<cart[]>(`${this.apiUrl}/cart?userId=${userId}`)
-  //     .pipe(
-  //       // Handle the response and error properly
-  //       catchError(error => {
-  //         console.error('Error fetching cart list:', error);
-  //         return throwError(() => new Error('Error fetching cart list'));
-  //       })
-  //     );
-  // }
-
-
-  // // removeToCart(cartId: number) {
-  // //   return this.http.delete(`${this.apiUrl}/cart/${cartId}`);
-  // // }
-  // removeToCart(cartItemId: number) {
-  //   return this.http.delete(`${this.apiUrl}/cart/${cartItemId}`);
-  // }
-
-  currentCart(): Observable<cart[]> {
-    return this.http.get<cart[]>(`${this.apiUrl}/cart`).pipe(
-      map(cartItems => {
-        console.log('Raw cart items from API:', cartItems); // Log the raw API response
-        return cartItems.map(item => {
-          if (!item.id) {
-            console.warn('Item without ID found in cart:', item);
-          }
-          return item;
-        });
-      }),
-      catchError(error => {
-        console.error('Error fetching cart data:', error);
-        return throwError(() => new Error('Failed to fetch cart data.'));
-      })
-    );
-  }
-
   loadInitialCartData() {
     const user = localStorage.getItem('loggedUser');
     if (user) {
@@ -279,9 +237,40 @@ export class ProductService {
     });
   }
 
-  onPlaceOrder(data: order) {
-    return this.http.post(`${this.apiUrl}/orders`, data);
+  currentCart(): Observable<cart[]> {
+    const user = localStorage.getItem('loggedUser');
+    if (user) {
+      const userId = JSON.parse(user).id;
+      return this.http.get<cart[]>(`${this.apiUrl}/cart?userId=${userId}`).pipe(
+        map(cartItems => {
+          console.log('Raw cart items from API:', cartItems);
+          return cartItems.map(item => {
+            if (!item.id) {
+              console.warn('Item without ID found in cart:', item);
+            }
+            return item;
+          });
+        }),
+        catchError(error => {
+          console.error('Error fetching cart data:', error);
+          return throwError(() => new Error('Failed to fetch cart data.'));
+        })
+      );
+    } else {
+      console.warn('No user logged in, returning empty cart.');
+      return new BehaviorSubject<cart[]>([]).asObservable(); // Return an empty array if no user is logged in
+    }
   }
+
+  onPlaceOrder(data: order): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/orders`, data).pipe(
+      catchError(error => {
+        console.error('Order placement failed:', error);
+        return throwError(() => new Error('Order placement failed'));
+      })
+    );
+  }
+
 
   orderList() {
     let userStore = localStorage.getItem('loggedUser');
