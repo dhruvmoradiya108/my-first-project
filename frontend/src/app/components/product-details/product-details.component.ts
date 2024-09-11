@@ -24,40 +24,6 @@ export class ProductDetailsComponent implements OnInit {
   removeCart: boolean = false;
   cartData: product | undefined;
 
-  // ngOnInit(): void {
-  //   let productId = this.activateRoute.snapshot.paramMap.get('productId')
-  //   console.log(productId);
-  //   productId && this.product.getProduct(productId).subscribe((res) => {
-  //     console.log(res);
-  //     this.productData = res;
-  //     let cartData = localStorage.getItem('localCart')
-  //     if (productId && cartData) {
-  //       let items = JSON.parse(cartData);
-  //       items = items.filter((item: product) => productId === item.id.toString());
-  //       // console.log("items", items);
-  //       if (items.length) {
-  //         this.removeCart = true;
-  //       } else {
-  //         this.removeCart = false
-  //       }
-  //     }
-
-  //     let user = localStorage.getItem('loggedUser');
-  //     if (user) {
-  //       let userId = user && JSON.parse(user)[0].id;
-  //       this.product.getCartList(userId);
-
-  //       this.product.cartData.subscribe((res) => {
-  //         let item = res.filter((item: product) => productId?.toString() === item.productId?.toString())
-
-  //         if (item.length) {
-  //           this.cartData = item[0]
-  //           this.removeCart = true;
-  //         }
-  //       })
-  //     }
-  //   })
-  // }
 
   ngOnInit(): void {
     let productId = this.activateRoute.snapshot.paramMap.get('productId');
@@ -105,7 +71,6 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-
   handleQuantity(value: string) {
     if (this.productQuantity < 20 && value === 'plus') {
       this.productQuantity += 1;
@@ -113,7 +78,6 @@ export class ProductDetailsComponent implements OnInit {
       this.productQuantity -= 1;
     }
   }
-
 
   onAddToCart() {
     if (this.productData) {
@@ -162,8 +126,6 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-
-
   onRemoveFromCart(productId: number) {
     if (!localStorage.getItem('loggedUser')) {
       this.product.localRemoveFromCart(productId)
@@ -177,25 +139,6 @@ export class ProductDetailsComponent implements OnInit {
     }
     this.removeCart = false
   }
-
-
-  // onRemoveFromCart(productId: number) {
-  //   if (!localStorage.getItem('loggedUser')) {
-  //     this.product.localRemoveFromCart(productId);
-  //   } else {
-  //     this.cartData && this.product.removeToCart(this.cartData.id).subscribe({
-  //       next: (res) => {
-  //         console.log("Response from server:", res);
-  //         let user = localStorage.getItem('loggedUser');
-  //         let userId = user && JSON.parse(user)[0].id;
-  //         this.product.getCartList(userId);
-  //       },
-  //       error: (err) => {
-  //         console.error("Error removing product from cart:", err);
-  //       }
-  //     });
-  //   }
-  // }
 }
 
 

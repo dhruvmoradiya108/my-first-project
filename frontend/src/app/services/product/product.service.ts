@@ -118,7 +118,7 @@
 import { EventEmitter, inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { cart, order, product } from '../../../data-type';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -126,8 +126,14 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 export class ProductService {
   http = inject(HttpClient);
   cartData = new EventEmitter<product[] | []>();
+  private cartDataSubject = new BehaviorSubject<cart[]>([]);
+  public cartAddData = this.cartDataSubject.asObservable();
 
   private apiUrl = 'http://localhost:5000';
+
+  constructor(){
+    this.loadInitialCartData();
+  }
 
   addProduct(data: product) {
     return this.http.post(`${this.apiUrl}/products`, data);
@@ -189,30 +195,30 @@ export class ProductService {
     }
   }
 
-  addToCart(cartData: cart) {
-    return this.http.post(`${this.apiUrl}/cart`, cartData);
-  }
-
-  getCartList(userId: number) {
-    return this.http
-      .get<cart[]>(`${this.apiUrl}/cart?userId=${userId}`)
-      .pipe(
-        // Handle the response and error properly
-        catchError(error => {
-          console.error('Error fetching cart list:', error);
-          return throwError(() => new Error('Error fetching cart list'));
-        })
-      );
-  }
-
-
-  // removeToCart(cartId: number) {
-  //   return this.http.delete(`${this.apiUrl}/cart/${cartId}`);
+  // addToCart(cartData: cart) {
+  //   return this.http.post(`${this.apiUrl}/cart`, cartData);
   // }
-  removeToCart(cartItemId: number) {
-    return this.http.delete(`${this.apiUrl}/cart/${cartItemId}`);
-  }
-  
+
+  // getCartList(userId: number) {
+  //   return this.http
+  //     .get<cart[]>(`${this.apiUrl}/cart?userId=${userId}`)
+  //     .pipe(
+  //       // Handle the response and error properly
+  //       catchError(error => {
+  //         console.error('Error fetching cart list:', error);
+  //         return throwError(() => new Error('Error fetching cart list'));
+  //       })
+  //     );
+  // }
+
+
+  // // removeToCart(cartId: number) {
+  // //   return this.http.delete(`${this.apiUrl}/cart/${cartId}`);
+  // // }
+  // removeToCart(cartItemId: number) {
+  //   return this.http.delete(`${this.apiUrl}/cart/${cartItemId}`);
+  // }
+
   currentCart(): Observable<cart[]> {
     return this.http.get<cart[]>(`${this.apiUrl}/cart`).pipe(
       map(cartItems => {
@@ -231,6 +237,47 @@ export class ProductService {
     );
   }
 
+  loadInitialCartData() {
+    const user = localStorage.getItem('loggedUser');
+    if (user) {
+      const userId = JSON.parse(user).id;
+      this.updateCartData(userId);
+    }
+  }
+
+  addToCart(cartData: cart): Observable<any> {
+    return this.http.post(`${this.apiUrl}/cart`, cartData).pipe(
+      tap(() => this.updateCartData(cartData.userId))
+    );
+  }
+
+  removeToCart(cartItemId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/cart/${cartItemId}`).pipe(
+      tap(() => {
+        const user = localStorage.getItem('loggedUser');
+        if (user) {
+          const userId = JSON.parse(user).id;
+          this.updateCartData(userId);
+        }
+      })
+    );
+  }
+
+  getCartList(userId: number): Observable<cart[]> {
+    return this.http.get<cart[]>(`${this.apiUrl}/cart?userId=${userId}`).pipe(
+      tap((cartItems) => this.cartDataSubject.next(cartItems)),
+      catchError(error => {
+        console.error('Error fetching cart list:', error);
+        return throwError(() => new Error('Error fetching cart list'));
+      })
+    );
+  }
+
+  private updateCartData(userId: number): void {
+    this.getCartList(userId).subscribe(cartItems => {
+      this.cartDataSubject.next(cartItems);
+    });
+  }
 
   onPlaceOrder(data: order) {
     return this.http.post(`${this.apiUrl}/orders`, data);

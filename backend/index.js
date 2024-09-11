@@ -139,7 +139,7 @@ app.post("/products", (req, res) => {
 
       // Send a 500 status with a detailed message
       return res
-        .status(500)
+        .status(200)
         .json({ message: "Failed to add product", error: err.message });
     }
 
@@ -173,12 +173,12 @@ app.delete("/products/:id", (req, res) => {
   db.query(sql, [id], (err, result) => {
     if (err) {
       return res
-        .status(500)
+        .status(200)
         .json({ success: false, message: "Error deleting product" });
     }
     if (result.affectedRows === 0) {
       return res
-        .status(404)
+        .status(200)
         .json({ success: false, message: "Product not found" });
     }
     res.json({ success: true, message: "Product deleted successfully" });
@@ -221,7 +221,7 @@ app.post("/cart", (req, res) => {
     if (err) {
       console.error("Error inserting item into cart:", err);
       return res
-        .status(500)
+        .status(200)
         .json({ message: "Server Error: Unable to add item to cart." });
     }
     res.json({ message: "Item added to cart" });
@@ -236,7 +236,7 @@ app.get("/cart", (req, res) => {
     if (err) {
       console.error("Error fetching cart items:", err);
       return res
-        .status(500)
+        .status(200)
         .json({ message: "Server Error: Unable to fetch cart items." });
     }
     res.json(results);
@@ -253,7 +253,7 @@ app.delete("/cart/:id", (req, res) => {
     if (err) {
       console.error("Error deleting item from cart:", err);
       return res
-        .status(500)
+        .status(200)
         .json({ message: "Server Error: Unable to remove item from cart." });
     }
     res.json({ message: "Item removed from cart" });

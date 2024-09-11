@@ -54,16 +54,6 @@ export class UserAuthComponent {
     })
   }
 
-  // onUserSignup(data: signUp): void {
-  //   this.user.userSignUp(data);
-  //   // console.warn(data);
-  // }
-
-  // onUserLogin(data: logIn): void {
-  //   this.user.userLogin(data);
-  //   // console.warn(data);
-  // }
-
   openLoginForm() {
     this.showLoginForm = true;
     this.user.invalidUserAuth.subscribe((isError) => {
