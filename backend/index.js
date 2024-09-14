@@ -279,27 +279,28 @@ app.post("/orders", (req, res) => {
 
 // Get Order List
 app.get("/orders", (req, res) => {
+  const userId = req.query.userId;
+
   const sql = "SELECT * FROM orders WHERE userId = ?";
-  db.query(sql, [req.query.userId], (err, results) => {
+  db.query(sql, [userId], (err, results) => {
     if (err) {
       console.error("Error fetching orders:", err);
-      res.status(500).send("Error fetching orders");
-    } else {
-      res.json(results);
+      return res.status(500).send("Error fetching orders");
     }
+    res.json(results);
   });
 });
 
-// Cancel Order
 app.delete("/orders/:id", (req, res) => {
+  const orderId = req.params.id;
+
   const sql = "DELETE FROM orders WHERE id = ?";
-  db.query(sql, [req.params.id], (err, result) => {
+  db.query(sql, [orderId], (err, result) => {
     if (err) {
-      console.error("Error canceling order:", err);
-      res.status(500).send("Error canceling order");
-    } else {
-      res.send("Order canceled");
+      console.error("Error deleting order:", err);
+      return res.status(500).send("Error deleting order");
     }
+    res.send("Order deleted");
   });
 });
 

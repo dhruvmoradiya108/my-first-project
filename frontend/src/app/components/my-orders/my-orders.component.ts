@@ -13,24 +13,48 @@ import { CommonModule } from '@angular/common';
 export class MyOrdersComponent implements OnInit {
 
   product = inject(ProductService)
-  orderedData : order[] | undefined
+  orderedData: order[] | undefined
+  orders: order[] | undefined;
 
   ngOnInit(): void {
-      this.getOrderList();
+    this.getOrderList();
   }
 
-  cancelOrder(orderId: number|undefined){
+  cancelOrder(orderId: number | undefined) {
     orderId && this.product.cancelOrder(orderId).subscribe((res) => {
-      if(res){
+      if (res) {
         this.getOrderList();
       }
     })
   }
 
-  getOrderList(){
-    this.product.orderList().subscribe((res) => {
-      this.orderedData = res
-    })
-  }
+  getOrderList() {
+    let user = localStorage.getItem('loggedUser');
+    let userId: number | undefined;
 
+    if (user) {
+      try {
+        let parsedUser = JSON.parse(user);
+        userId = parsedUser.id; 
+        console.error(userId)
+      } catch (e) {
+        console.error('Error parsing user from localStorage:', e);
+      }
+    }
+
+    if (!userId) {
+      console.error('User ID is undefined. Cannot fetch orders.');
+      return;
+    }
+
+    this.product.orderList(userId).subscribe(
+      (orders) => {
+        this.orders = orders;
+      },
+      (error) => {
+        console.error('Failed to fetch order list:', error);
+      }
+    );
+
+  }
 }

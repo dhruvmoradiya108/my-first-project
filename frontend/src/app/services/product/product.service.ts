@@ -272,14 +272,14 @@ export class ProductService {
   }
 
 
-  orderList() {
-    let userStore = localStorage.getItem('loggedUser');
-    let storageUserData = userStore && JSON.parse(userStore)[0];
-    return this.http.get<order[]>(
-      `${this.apiUrl}/orders?userId=` + storageUserData.id
-    );
+  orderList(userId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/orders?userId=${userId}`);
   }
 
+  cancelOrder(orderId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/orders/${orderId}`);
+  }
+  
   deleteCartItems(cartId: number) {
     return this.http
       .delete(`${this.apiUrl}/cart/` + cartId)
@@ -288,7 +288,7 @@ export class ProductService {
       });
   }
 
-  cancelOrder(orderId: number) {
-    return this.http.delete(`${this.apiUrl}/orders/${orderId}`);
-  }
+  // cancelOrder(orderId: number) {
+  //   return this.http.delete(`${this.apiUrl}/orders/${orderId}`);
+  // }
 }
