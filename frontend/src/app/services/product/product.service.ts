@@ -140,7 +140,7 @@ export class ProductService {
   }
 
   productList() {
-    return this.http.get<product[]>(`${this.apiUrl}/products`);
+    return this.http.get<product[]>(`${this.apiUrl}/products`,  { withCredentials: true });
   }
 
   productDelete(id: number) {

@@ -4,9 +4,14 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const md5 = require("md5");
 const PORT = 5000;
+const session = require('express-session');
+const MySQLStore = require("express-mysql-session")(session);
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:4200",
+  credentials: true
+}));
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
@@ -21,9 +26,31 @@ db.connect((err) => {
   console.log("Connected successfully.");
 });
 
+const sessionStore = new MySQLStore({}, db);
+
+app.use(session({
+  key: 'xeei',
+  secret: 'xeseic',
+  store: sessionStore,
+  resave: false,
+  saveUninitialized: false,
+
+}))
+
+const isLoggedIn = (req, res, next) => {
+  if (req.session.userId) {
+    next();
+  } else {
+    res.status(401).json({ error: "You must be logged in to access this resource" });
+  }
+};
+
+// console.log(isLoggedIn())
+
 // FOR SELLER SIGNUP AND LOGIN
 app.post("/signup", (req, res) => {
   const { name, email, password } = req.body;
+  const hashedPassword = md5(password);
 
   // Check if the email already exists
   const checkEmailQuery = "SELECT * FROM seller_data WHERE email = ?";
@@ -36,7 +63,7 @@ app.post("/signup", (req, res) => {
     // Insert new seller into the database
     const insertQuery =
       "INSERT INTO seller_data (name, email, password) VALUES (?, ?, ?)";
-    db.query(insertQuery, [name, email, password], (err, result) => {
+    db.query(insertQuery, [name, email, hashedPassword], (err, result) => {
       if (err) throw err;
       res.status(201).json({ message: "Seller registered successfully" });
     });
@@ -45,15 +72,21 @@ app.post("/signup", (req, res) => {
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
+  const hashedPassword = md5(password);
 
   // Check if the email exists
   const checkEmailQuery =
     "SELECT * FROM seller_data WHERE email = ? AND password = ?";
-  db.query(checkEmailQuery, [email, password], (err, result) => {
+  db.query(checkEmailQuery, [email, hashedPassword], (err, result) => {
     if (err) throw err;
     if (result.length === 0) {
       return res.status(200).json({ error: "Invalid email or password" });
     }
+
+    req.session.userId = result[0].id; //userId save in session
+    req.session.user = result[0]; //user save in session
+    console.log(req.session.user);
+    console.log(req.session.userId);
 
     // Login successful
     res.status(200).json({ message: "Login successful", seller: result[0] });
@@ -101,7 +134,7 @@ app.post("/userLogin", (req, res) => {
 });
 
 // Add Product
-app.post("/products", (req, res) => {
+app.post("/products", isLoggedIn, (req, res) => {
   // Destructure the incoming request body
   const {
     name,

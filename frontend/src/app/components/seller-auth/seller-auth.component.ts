@@ -22,12 +22,16 @@ export class SellerAuthComponent {
 
   onSignUp(signUpData: signUp) {
     this.service.signUp(signUpData).subscribe(
-      response => {
-        console.log('Sign-up successful:', response);
-        this.router.navigate(['seller-home'])
-        // Handle successful sign-up
+      (response) => {
+
+        if (response && response.seller) {
+          console.log('Sign-up successful:', response);
+          localStorage.setItem('loggedSeller', JSON.stringify(response.seller));
+          sessionStorage.setItem('seluse', JSON.stringify(response.seller))
+          this.router.navigate(['seller-home'])
+        }
       },
-      error => {
+      (error) => {
         console.error('Sign-up error:', error);
         this.authError = error.error.error;
       }
@@ -39,8 +43,11 @@ export class SellerAuthComponent {
       (res: any) => {
         // Check if the response contains the seller data
         if (res && res.seller) {
+          console.log('Sign-up successful:', res);
           // Store seller data in localStorage
           localStorage.setItem('loggedSeller', JSON.stringify(res.seller));
+          sessionStorage.setItem('seluse', JSON.stringify(res.seller))
+
           // Navigate to seller home page
           this.router.navigate(['seller-home']);
         }

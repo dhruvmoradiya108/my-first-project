@@ -262,6 +262,7 @@ export class HeaderComponent implements OnInit {
 
   onLogout() {
     localStorage.removeItem('loggedSeller');
+    sessionStorage.removeItem('seluse');
     this.router.navigate(['/']);
   }
 
