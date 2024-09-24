@@ -173,6 +173,8 @@ import { FormsModule } from '@angular/forms';
 import { FilterPipe } from "../../pipe/filter.pipe";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faUser, faHome, faPowerOff, faShoppingCart, faPlus, faList12, faPerson, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { UserService } from '../../services/user/user.service';
+import { SellerService } from '../../services/seller/seller.service';
 
 @Component({
   selector: 'app-header',
@@ -192,6 +194,8 @@ export class HeaderComponent implements OnInit {
   faPerson = faPerson;
   faRightFromBracket = faRightFromBracket;
 
+  userService = inject(UserService)
+  sellerService = inject(SellerService)
   menuType: string = '';
   sellerName: string = '';
   userName: string = '';
@@ -260,15 +264,23 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  onLogout() {
-    localStorage.removeItem('loggedSeller');
-    sessionStorage.removeItem('seluse');
-    this.router.navigate(['/']);
+  onLogoutSeller() {
+    this.sellerService.sellerLogout().subscribe(
+      () => {
+        localStorage.removeItem('loggedSeller');
+        sessionStorage.removeItem('seluse');
+        this.router.navigate(['/']);
+      }
+    )
   }
 
   onLogoutUser() {
-    localStorage.removeItem('loggedUser');
-    this.router.navigate(['/user-auth']);
+    this.userService.userLogout().subscribe(
+      () => {
+        localStorage.removeItem('loggedUser');
+        this.router.navigate(['/user-auth']);
+      }
+    )
   }
 
   searchProduct(query: KeyboardEvent) {

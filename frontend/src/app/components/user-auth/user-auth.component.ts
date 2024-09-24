@@ -29,7 +29,7 @@ export class UserAuthComponent {
       if (res) {
         console.log('Signup Successfully.', res)
         // localStorage.setItem('loggedUser', JSON.stringify(res));
-        const { id, name, email, password } = res.seller;
+        const { id, name, email, password } = res.user;
         const loggedUser = { id, name, email, password };
         localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
         this.router.navigate(['']);
@@ -44,7 +44,7 @@ export class UserAuthComponent {
       if (res) {
         console.log('Login Successfully.', res)
         // localStorage.setItem('loggedUser', JSON.stringify(res));
-        const { id, name, email, password } = res.seller;
+        const { id, name, email, password } = res.user;
         const loggedUser = { id, name, email, password };
         localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
         this.router.navigate(['']);

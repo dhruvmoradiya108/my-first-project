@@ -136,7 +136,7 @@ export class ProductService {
   }
 
   addProduct(data: product) {
-    return this.http.post(`${this.apiUrl}/products`, data);
+    return this.http.post(`${this.apiUrl}/products`, data, { withCredentials: true });
   }
 
   productList() {
@@ -144,17 +144,17 @@ export class ProductService {
   }
 
   productDelete(id: number) {
-    return this.http.delete(`${this.apiUrl}/products/${id}`);
+    return this.http.delete(`${this.apiUrl}/products/${id}`, { withCredentials: true });
   }
 
   getProduct(id: string) {
-    return this.http.get<product>(`${this.apiUrl}/products/${id}`);
+    return this.http.get<product>(`${this.apiUrl}/products/${id}`, { withCredentials: true });
   }
 
   updateProduct(product: product) {
     return this.http.put<product>(
       `${this.apiUrl}/products/${product.id}`,
-      product
+      product, { withCredentials: true }
     );
   }
 
@@ -168,7 +168,7 @@ export class ProductService {
 
   searchProduct(query: string) {
     return this.http.get<product[]>(
-      `${this.apiUrl}/products?search=${query}`
+      `${this.apiUrl}/products?search=${query}`, { withCredentials: true }
     );
   }
 

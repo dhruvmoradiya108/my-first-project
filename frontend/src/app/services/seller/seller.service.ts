@@ -23,6 +23,10 @@ export class SellerService {
     return this.http.post(`${this.baseUrl}/login`, sellerData);
   }
 
+  sellerLogout () : Observable<any> {
+    return this.http.get(`${this.baseUrl}/logout`, {withCredentials: true});
+  }
+
   // userSignUp(data: signUp) {
   //   return this.http.post('http://localhost:3000/seller', data, { observe: 'response' })
   //   .subscribe((result : any) => {
