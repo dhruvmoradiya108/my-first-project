@@ -1,4 +1,3 @@
-
 const mysql = require("mysql2");
 const express = require("express");
 const cors = require("cors");
@@ -7,6 +6,7 @@ const md5 = require("md5");
 const PORT = 5000;
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
+require("dotenv").config();
 
 const app = express();
 app.use(
@@ -18,10 +18,10 @@ app.use(
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "dHruv@108",
-  database: "one_xero_eight",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
 db.connect((err) => {
@@ -49,7 +49,9 @@ const isLoggedIn = (req, res, next) => {
   if (req.session.userId) {
     next();
   } else {
-    res.status(401).json({ error: "You must be logged in to access this resource" });
+    res
+      .status(401)
+      .json({ error: "You must be logged in to access this resource" });
   }
 };
 
@@ -57,7 +59,9 @@ const isLoggedIn = (req, res, next) => {
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      return res.status(500).json({ message: "Logout failed", error: err.message });
+      return res
+        .status(500)
+        .json({ message: "Logout failed", error: err.message });
     }
     res.clearCookie("session_id");
     res.status(200).json({ message: "Logged out successfully" });
@@ -90,7 +94,8 @@ app.post("/login", (req, res) => {
   const { email, password } = req.body;
   const hashedPassword = md5(password);
 
-  const checkEmailQuery = "SELECT * FROM seller_data WHERE email = ? AND password = ?";
+  const checkEmailQuery =
+    "SELECT * FROM seller_data WHERE email = ? AND password = ?";
   db.query(checkEmailQuery, [email, hashedPassword], (err, result) => {
     if (err) throw err;
     if (result.length === 0) {
@@ -127,7 +132,8 @@ app.post("/userSignUp", (req, res) => {
 app.post("/userLogin", (req, res) => {
   const { email, password } = req.body;
 
-  const checkEmailQuery = "SELECT * FROM user_data WHERE email = ? AND password = ?";
+  const checkEmailQuery =
+    "SELECT * FROM user_data WHERE email = ? AND password = ?";
   db.query(checkEmailQuery, [email, password], (err, result) => {
     if (err) throw err;
     if (result.length === 0) {
@@ -142,7 +148,8 @@ app.post("/userLogin", (req, res) => {
 
 // Protected Route to Add Product
 app.post("/products", isLoggedIn, (req, res) => {
-  const { name, price, description, image, color, category, sellerName } = req.body;
+  const { name, price, description, image, color, category, sellerName } =
+    req.body;
   const product = {
     name,
     price,
@@ -160,7 +167,9 @@ app.post("/products", isLoggedIn, (req, res) => {
   db.query(sql, product, (err, result) => {
     if (err) {
       console.error("Error adding product:", err);
-      return res.status(500).json({ message: "Failed to add product", error: err.message });
+      return res
+        .status(500)
+        .json({ message: "Failed to add product", error: err.message });
     }
     res.status(200).json({ message: "Product added successfully", result });
   });
@@ -196,7 +205,9 @@ app.delete("/products/:id", isLoggedIn, (req, res) => {
       return res.status(500).json({ message: "Error deleting product" });
     }
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Product not found or not authorized" });
+      return res
+        .status(404)
+        .json({ message: "Product not found or not authorized" });
     }
     res.json({ message: "Product deleted successfully" });
   });
@@ -214,21 +225,36 @@ app.get("/products/:id", (req, res) => {
 // Update Product (Protected)
 app.put("/products/:id", isLoggedIn, (req, res) => {
   const sql = "UPDATE products SET ? WHERE id = ? AND seller_id = ?";
-  db.query(sql, [req.body, req.params.id, req.session.userId], (err, result) => {
-    if (err) {
-      console.error("Error updating product:", err);
-      return res.status(500).json({ message: "Error updating product" });
+  db.query(
+    sql,
+    [req.body, req.params.id, req.session.userId],
+    (err, result) => {
+      if (err) {
+        console.error("Error updating product:", err);
+        return res.status(500).json({ message: "Error updating product" });
+      }
+      if (result.affectedRows === 0) {
+        return res
+          .status(404)
+          .json({ message: "Product not found or not authorized" });
+      }
+      res.json({ message: "Product updated successfully" });
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Product not found or not authorized" });
-    }
-    res.json({ message: "Product updated successfully" });
-  });
+  );
 });
 
 // Add Item to Cart (Protected)
 app.post("/cart", isLoggedIn, (req, res) => {
-  const { productId, name, price, image, description, color, category, quantity } = req.body;
+  const {
+    productId,
+    name,
+    price,
+    image,
+    description,
+    color,
+    category,
+    quantity,
+  } = req.body;
   const cartItem = {
     product_id: productId,
     name,
@@ -246,7 +272,9 @@ app.post("/cart", isLoggedIn, (req, res) => {
   db.query(sql, cartItem, (err, result) => {
     if (err) {
       console.error("Error adding to cart:", err);
-      return res.status(500).json({ message: "Failed to add to cart", error: err.message });
+      return res
+        .status(500)
+        .json({ message: "Failed to add to cart", error: err.message });
     }
     res.status(200).json({ message: "Added to cart successfully", result });
   });
@@ -265,19 +293,18 @@ app.post("/cart", isLoggedIn, (req, res) => {
 // });
 
 app.get("/cart", (req, res) => {
-    const userId = req.query.userId;
-    const sql = "SELECT * FROM cart WHERE userId = ?";
-    db.query(sql, [userId], (err, results) => {
-      if (err) {
-        console.error("Error fetching cart items:", err);
-        return res
-          .status(200)
-          .json({ message: "Server Error: Unable to fetch cart items." });
-      }
-      res.json(results);
-    });
+  const userId = req.query.userId;
+  const sql = "SELECT * FROM cart WHERE userId = ?";
+  db.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.error("Error fetching cart items:", err);
+      return res
+        .status(200)
+        .json({ message: "Server Error: Unable to fetch cart items." });
+    }
+    res.json(results);
   });
-  
+});
 
 // Remove Item from Cart (Protected)
 app.delete("/cart/:id", isLoggedIn, (req, res) => {
@@ -288,7 +315,9 @@ app.delete("/cart/:id", isLoggedIn, (req, res) => {
       return res.status(500).json({ message: "Error deleting cart item" });
     }
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Cart item not found or not authorized" });
+      return res
+        .status(404)
+        .json({ message: "Cart item not found or not authorized" });
     }
     res.json({ message: "Cart item deleted successfully" });
   });
@@ -338,8 +367,6 @@ app.delete("/orders/:id", (req, res) => {
   });
 });
 
-
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
