@@ -46,8 +46,8 @@ app.use(
 
 // Middleware to check if user is logged in
 const isLoggedIn = (req, res, next) => {
-  if (req.session.userId) {
-    next();
+  if (req.session && req.session.userId) {
+    return next();
   } else {
     res
       .status(401)
@@ -307,19 +307,33 @@ app.get("/cart", (req, res) => {
 });
 
 // Remove Item from Cart (Protected)
-app.delete("/cart/:id", isLoggedIn, (req, res) => {
-  const sql = "DELETE FROM cart WHERE id = ? AND user_id = ?";
-  db.query(sql, [req.params.id, req.session.userId], (err, result) => {
+// app.delete("/cart/:id", isLoggedIn, (req, res) => {
+//   const sql = "DELETE FROM cart WHERE id = ? AND user_id = ?";
+//   db.query(sql, [req.params.id, req.session.userId], (err, result) => {
+//     if (err) {
+//       console.error("Error deleting cart item:", err);
+//       return res.status(500).json({ message: "Error deleting cart item" });
+//     }
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ message: "Cart item not found or not authorized" });
+//     }
+//     res.json({ message: "Cart item deleted successfully" });
+//   });
+// });
+
+app.delete("/cart/:id", (req, res) => {
+  const { id } = req.params;
+
+  const sql = "DELETE FROM cart WHERE id = ?";
+
+  db.query(sql, [id], (err, result) => {
     if (err) {
-      console.error("Error deleting cart item:", err);
-      return res.status(500).json({ message: "Error deleting cart item" });
-    }
-    if (result.affectedRows === 0) {
+      console.error("Error deleting item from cart:", err);
       return res
-        .status(404)
-        .json({ message: "Cart item not found or not authorized" });
+        .status(200)
+        .json({ message: "Server Error: Unable to remove item from cart." });
     }
-    res.json({ message: "Cart item deleted successfully" });
+    res.json({ message: "Item removed from cart" });
   });
 });
 

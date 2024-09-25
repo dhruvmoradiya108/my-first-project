@@ -93,7 +93,7 @@ export class ProductService {
   }
 
   removeToCart(cartItemId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/cart/${cartItemId}`).pipe(
+    return this.http.delete(`${this.apiUrl}/cart/${cartItemId}`, { withCredentials: true }).pipe(
       tap(() => {
         const user = localStorage.getItem('loggedUser');
         if (user) {
