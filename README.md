@@ -28,11 +28,11 @@ This project is built using Angular for the frontend and Node.js for the backend
    git clone https://github.com/your-username/your-repo.git
 
 2. Navigate to the backend directory:
-    ```bash
+    bash
     cd backend 
 
 3.Install the dependencies:
-    ```bash
+    bash
     npm install
 
 4.Configure the MySQL database credentials in .env:
