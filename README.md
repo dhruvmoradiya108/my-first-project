@@ -5,6 +5,7 @@ This is my first Angular project. I developed a Ecommerce website in this projec
 This project is a web application built using Angular for the frontend and Node.js with Express.js for the backend. It connects to a MySQL database to handle user data and session management.
 
 **Features**
+
 __Frontend__: Angular 18
 User login and registration pages
 Product listing with search functionality
