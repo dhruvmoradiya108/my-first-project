@@ -15,26 +15,31 @@ import { authGuard } from './guard/auth.guard';
 export const routes: Routes = [
     {
         path: '',
-        component: HomeComponent
+        component: HomeComponent,
+        title: 'Home'
     },
     {
         path: 'sell-auth',
-        component: SellerAuthComponent
+        component: SellerAuthComponent,
+        title: 'Seller Login'
     },
     {
         path: 'seller-home',
         component: SellerHomeComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        title: 'Seller Area'
     },
     {
         path: 'seller-add-product',
         component: SellerAddProductComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        title: 'Add Products'
     },
     {
         path: 'seller-update-product/:id',
         component: SellerUpdateProductComponent,
         // canActivate: [authGuard]
+        title: 'Update Products'
     },
     {
         path: 'search',
@@ -46,18 +51,22 @@ export const routes: Routes = [
     },
     {
         path: 'user-auth',
-        component: UserAuthComponent
+        component: UserAuthComponent,
+        title: 'User Login'
     }, 
     {
         path: 'cart-page',
-        component: CartPageComponent
+        component: CartPageComponent,
+        title: 'Cart'
     },
     {
         path: 'checkout',
-        component: CheckoutComponent
+        component: CheckoutComponent,
+        title: 'Checkout'
     },
     {
         path: 'my-orders',
-        component: MyOrdersComponent
+        component: MyOrdersComponent,
+        title: 'My Orders'
     }
 ];
