@@ -7,60 +7,79 @@ This project is built using Angular for the frontend and Node.js for the backend
 
 - **User Authentication**: Login and signup system using Angular and Node.js.
 - **Product Management**: Display products, handle cart and checkout.
-- **MySQL Database**: User data, Product Information
-and Orders are stored in a MySQL database.
+- **MySQL Database**: User data, Product Information and Orders are stored in a MySQL database.
 - **Session Management**: Sessions are stored using MySQL.
 - **Cart Functionality**: Add, remove and update items in the cart.
 
-## Technologies Used in This Project 
+## Technologies Used in This Project
 
-| Frontend  | Backend   | Database |
-|-----------|-----------|----------|
-| Angular18 | Node.js   | MySQl    |
-| HTML      | Express.js|          |
-| CSS       |           |          |
+| Frontend  | Backend    | Database |
+| --------- | ---------- | -------- |
+| Angular18 | Node.js    | MySQl    |
+| HTML      | Express.js |          |
+| CSS       |            |          |
 
 ## Installation
 
-### Backend Setup 
+### Backend Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/dhruvmoradiya108/my-first-project
 
+   ```
+
 2. Navigate to the backend directory:
+
    ```bash
    cd backend
 
+   ```
+
 3. Install the dependencied:
+
    ```bash
    npm install
 
+   ```
+
 4. Configure the MySQL database credentials in .env:
+
    ```plaintext
    DB_HOST=your_host
    DB_USER=your_username
    DB_PASSWORD=your_password
    DB_DATABASE=your_database
 
-5. Run the server: 
+   ```
+
+5. Run the server:
    ```bash
    nodemon index.js
+   ```
 
 ### Frontend Setup
 
 1. Navigate to the frontend directory:
-   ```bash 
+
+   ```bash
    cd frontend
 
+   ```
+
 2. Install Angular dependecies:
+
    ```bash
    npm install
 
+   ```
+
 3. Start the Angular development server:
-   ```bash 
-   ng serve 
+   ```bash
+   ng serve
+   ```
 
 ## Usage
-- Open your web browser and navigate to ```http://localhost:4200``` to view the application.
 
+- Open your web browser and navigate to `http://localhost:4200` to view the application.
