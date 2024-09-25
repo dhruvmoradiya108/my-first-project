@@ -26,4 +26,37 @@ This project is built using Angular for the frontend and Node.js for the backend
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-username/your-repo.git
-   cd backend 
+
+2. Navigate to the backend directory:
+    ```bash
+    cd backend 
+
+3.Install the dependencies:
+    ```bash
+    npm install
+
+4.Configure the MySQL database credentials in .env:
+    ```plaintext
+    DB_HOST=your_host
+    DB_USER=your_username
+    DB_PASSWORD=your_password
+    DB_DATABASE=your_database
+
+5.Run the server: 
+    ```bash
+    nodemon index.js
+
+
+### Frontend Setup
+
+1.Navigate to the frontend directory:
+    ```bash
+    cd frontend
+
+2.Install Angular dependencies:
+    ```bash
+    npm install
+
+3.Start the Angular development server:
+    ```bash
+    ng serve
