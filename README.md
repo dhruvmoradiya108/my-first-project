@@ -26,3 +26,4 @@ This project is built using Angular for the frontend and Node.js for the backend
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-username/your-repo.git
+   cd backend 
