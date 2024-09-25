@@ -69,41 +69,4 @@ export class SellerAuthComponent {
     this.showLoginForm = true;
     this.authError = '';
   }
-
-  // showLoginForm : boolean = false;
-  // authError : string = '';
-  // authErrorDiv : string = '';
-
-  // sellerLogInObj : any = {
-  //   "email": "",
-  //   "name": "",
-  //   "password": ""
-  // }
-
-  // seller = inject(SellerService)
-  // router = inject(Router)
-
-  // onSignUp(data:signUp):void{
-  //   this.seller.userSignUp(data)
-  // }
-
-  // onLogin(data: logIn): void {
-  //   this.seller.userLogin(data)
-  // }
-
-  // openLoginForm() {
-  //   this.showLoginForm = true;
-  //   this.seller.isLoginError.subscribe((isError) => {
-  //     console.warn(isError)
-  //     if(isError){
-  //       this.authError = 'Invalid Email or Password.';
-  //       this.authErrorDiv = '';
-  //     }
-  //   })
-  // }
-
-  // openSignUpForm(){
-  //   this.showLoginForm = false;
-  // }
-
 }

@@ -26,31 +26,4 @@ export class SellerService {
   sellerLogout () : Observable<any> {
     return this.http.get(`${this.baseUrl}/logout`, {withCredentials: true});
   }
-
-  // userSignUp(data: signUp) {
-  //   return this.http.post('http://localhost:3000/seller', data, { observe: 'response' })
-  //   .subscribe((result : any) => {
-  //     if(result){
-  //       localStorage.setItem('loggedSeller', JSON.stringify(result.body))
-  //       this.router.navigate(["seller-home"])
-  //     }
-  //   })
-  // }
-
-  // userLogin(data: logIn) {
-  //   return this.http.get(`http://localhost:3000/seller?email=${data.email}&password=${data.password}`,
-  //     { observe: 'response' })
-  //     .subscribe((result: any) => {
-  //       // console.log(result)
-  //       // console.warn(result)
-  //       if(result && result.body && result.body.length){
-  //         this.isLoginError.emit(false);
-  //         localStorage.setItem('loggedSeller', JSON.stringify(result.body))
-  //         this.router.navigate(["seller-home"])
-  //       } else {
-  //         console.error("Login failed.")
-  //         this.isLoginError.emit(true);
-  //       }
-  //     })
-  // }
 }

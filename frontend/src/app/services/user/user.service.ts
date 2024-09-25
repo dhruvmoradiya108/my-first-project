@@ -27,36 +27,5 @@ export class UserService {
     return this.http.get(`${this.baseURL}/logout`, {withCredentials: true});
   }
 
-  // userSignUp(data: signUp) {
-  //   return this.http.post('http://localhost:3000/users', data, { observe: 'response' })
-  //   .subscribe((res: any) => {
-  //     if(res){
-  //       localStorage.setItem('loggedUser', JSON.stringify(res.body))
-  //       this.router.navigate(['/'])
-  //     }
-  //   })
-  // }
-
-  // userLogin(data : logIn){
-  //   return this.http.get(`http://localhost:3000/users?email=${data.email}&password=${data.password}`, 
-  //     { observe: 'response' })
-  //     .subscribe((res : any) => {
-  //     if(res && res.body?.length){
-  //       // console.log(res)
-  //       this.invalidUserAuth.emit(false)
-  //       localStorage.setItem('loggedUser', JSON.stringify(res.body))
-  //       this.router.navigate(['/'])
-  //      } 
-  //     else {
-  //       console.error("Login Failed");
-  //       this.invalidUserAuth.emit(true)
-  //     }
-  //   })
-  // }
-
-  // userAuthReload(){
-  //   if(localStorage.getItem('user')){
-  //     this.router.navigate(['/'])
-  //   }
-  // }
+  
 }
