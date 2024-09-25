@@ -60,3 +60,7 @@ and Orders are stored in a MySQL database.
 3. Start the Angular development server:
    ```bash 
    ng serve 
+
+## Usage
+- Open your web browser and navigate to ```http://localhost:4200``` to view the application.
+
