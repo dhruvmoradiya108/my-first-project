@@ -100,10 +100,13 @@ export class HeaderComponent implements OnInit {
 
   onLogoutSeller() {
     this.sellerService.sellerLogout().subscribe(
-      () => {
-        localStorage.removeItem('loggedSeller');
-        sessionStorage.removeItem('seluse');
-        this.router.navigate(['/']);
+      (res) => {
+        console.log('Logged out:', res);
+        localStorage.removeItem('loggedSeller'); // Clear session data
+        this.router.navigate(['/login']);
+      },
+      (error) => {
+        console.error('Error during logout:', error)
       }
     )
   }

@@ -4,7 +4,8 @@ import { product } from '../../../data-type';
 import { CommonModule, Location } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { SellerService } from '../../services/seller/seller.service';
 
 @Component({
   selector: 'app-seller-home',
@@ -17,6 +18,8 @@ export class SellerHomeComponent {
 
   productList: undefined | product[];
   product = inject(ProductService)
+  sellerService = inject(SellerService)
+  router = inject(Router)
   faTrash = faTrash
   faEdit = faEdit
   faPlus = faPlus
@@ -26,8 +29,19 @@ export class SellerHomeComponent {
 
   ngOnInit(): void {
     this.productListFunction();
-  }
 
+    this.sellerService.isLoggedIn.subscribe((loggedIn :boolean) => {
+      if(!loggedIn){
+        this.router.navigate(['/sell-auth'])
+      }
+    })
+  }
+  
+  productListFunction() {
+    this.product.productList().subscribe((res) => {
+      this.productList = res;
+    })
+  }
   onDelete(id: number) {
     // Show confirmation dialog first
     const isConfirmed = confirm("Are you sure you want to delete?");
@@ -54,11 +68,6 @@ export class SellerHomeComponent {
     }
   }
 
-
-  productListFunction() {
-    this.product.productList().subscribe((res) => {
-      this.productList = res;
-    })
-  }
+  
   
 }

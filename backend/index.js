@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const md5 = require("md5");
+const bcrypt = require('bcrypt')
 const PORT = 5000;
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
@@ -39,7 +40,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 1000 * 60 * 60, // 1 hour
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   })
 );
@@ -71,14 +72,16 @@ app.get("/logout", (req, res) => {
 // Seller Signup
 app.post("/signup", (req, res) => {
   const { name, email, password } = req.body;
-  const hashedPassword = md5(password);
+ 
 
   const checkEmailQuery = "SELECT * FROM seller_data WHERE email = ?";
-  db.query(checkEmailQuery, [email], (err, result) => {
+  db.query(checkEmailQuery, [email], async (err, result) => {
     if (err) throw err;
     if (result.length > 0) {
       return res.status(200).json({ error: "Email already exists" });
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const insertQuery =
       "INSERT INTO seller_data (name, email, password) VALUES (?, ?, ?)";
@@ -92,19 +95,26 @@ app.post("/signup", (req, res) => {
 // Seller Login
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
-  const hashedPassword = md5(password);
 
-  const checkEmailQuery =
-    "SELECT * FROM seller_data WHERE email = ? AND password = ?";
-  db.query(checkEmailQuery, [email, hashedPassword], (err, result) => {
+  const checkEmailQuery = "SELECT * FROM seller_data WHERE email = ?";
+  db.query(checkEmailQuery, [email], async (err, result) => {
     if (err) throw err;
     if (result.length === 0) {
       return res.status(200).json({ error: "Invalid email or password" });
     }
 
-    req.session.userId = result[0].id;
-    req.session.user = result[0]; // Store user data in session
-    res.status(200).json({ message: "Login successful", seller: result[0] });
+    const seller = result[0];
+
+    // Compare the hashed password with bcrypt
+    const isMatch = await bcrypt.compare(password, seller.password);
+    if (!isMatch) {
+      return res.status(200).json({ error: "Invalid email or password" });
+    }
+
+    // If password matches, set session data
+    req.session.userId = seller.id;
+    req.session.user = seller; // Store user data in session
+    res.status(200).json({ message: "Login successful", seller });
   });
 });
 
@@ -379,6 +389,16 @@ app.delete("/orders/:id", (req, res) => {
     }
     res.send("Order deleted");
   });
+});
+
+app.get("/check-session", (req, res) => {
+  if (req.session.user) {
+    // If session exists, return session data (e.g., user details)
+    res.json({ isLoggedIn: true, userData: req.session.user });
+  } else {
+    // Session is not found, user is not logged in
+    res.json({ isLoggedIn: false });
+  }
 });
 
 app.listen(PORT, () => {
