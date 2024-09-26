@@ -3,7 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const md5 = require("md5");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
+const CryptoJS = require("crypto-js");
 const PORT = 5000;
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
@@ -29,6 +30,10 @@ db.connect((err) => {
   if (err) throw err;
   console.log("Connected successfully.");
 });
+
+function encryptMessage(message, secretKey) {
+  return CryptoJS.AES.encrypt(message, secretKey).toString();
+}
 
 const sessionStore = new MySQLStore({}, db.promise());
 
@@ -72,13 +77,17 @@ app.get("/logout", (req, res) => {
 // Seller Signup
 app.post("/signup", (req, res) => {
   const { name, email, password } = req.body;
- 
 
   const checkEmailQuery = "SELECT * FROM seller_data WHERE email = ?";
   db.query(checkEmailQuery, [email], async (err, result) => {
     if (err) throw err;
+    const secretKey = "mysecretkey"; // This should be stored securely in env
+      const encryptedMessage = encryptMessage(
+        "Email already exists",
+        secretKey
+      );
     if (result.length > 0) {
-      return res.status(200).json({ error: "Email already exists" });
+      return res.status(200).json({ error: encryptedMessage });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -87,7 +96,13 @@ app.post("/signup", (req, res) => {
       "INSERT INTO seller_data (name, email, password) VALUES (?, ?, ?)";
     db.query(insertQuery, [name, email, hashedPassword], (err, result) => {
       if (err) throw err;
-      res.status(201).json({ message: "Seller registered successfully" });
+
+      const secretKey = "mysecretkey"; // This should be stored securely in env
+      const encryptedMessage = encryptMessage(
+        "Seller registered successfully",
+        secretKey
+      );
+      res.status(201).json({ message: encryptedMessage });
     });
   });
 });
