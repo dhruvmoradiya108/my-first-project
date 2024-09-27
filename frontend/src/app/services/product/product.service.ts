@@ -85,9 +85,10 @@ export class ProductService {
       this.updateCartData(userId);
     }
   }
-
+  
   addToCart(cartData: cart): Observable<any> {
-    return this.http.post(`${this.apiUrl}/cart`, cartData).pipe(
+    return this.http.post(`${this.apiUrl}/cart`, cartData, { withCredentials: true }
+    ).pipe(
       tap(() => this.updateCartData(cartData.userId))
     );
   }
@@ -105,7 +106,8 @@ export class ProductService {
   }
 
   getCartList(userId: number): Observable<cart[]> {
-    return this.http.get<cart[]>(`${this.apiUrl}/cart?userId=${userId}`).pipe(
+    return this.http.get<cart[]>(`${this.apiUrl}/cart?userId=${userId}`, { withCredentials: true }
+    ).pipe(
       tap((cartItems) => this.cartDataSubject.next(cartItems)),
       catchError(error => {
         console.error('Error fetching cart list:', error);
@@ -124,7 +126,7 @@ export class ProductService {
     const user = localStorage.getItem('loggedUser');
     if (user) {
       const userId = JSON.parse(user).id;
-      return this.http.get<cart[]>(`${this.apiUrl}/cart?userId=${userId}`).pipe(
+      return this.http.get<cart[]>(`${this.apiUrl}/cart?userId=${userId}`, { withCredentials: true }).pipe(
         map(cartItems => {
           console.log('Raw cart items from API:', cartItems);
           return cartItems.map(item => {
@@ -146,7 +148,7 @@ export class ProductService {
   }
 
   onPlaceOrder(data: order): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.apiUrl}/orders`, data).pipe(
+    return this.http.post<{ message: string }>(`${this.apiUrl}/orders`, data, { withCredentials: true }).pipe(
       catchError(error => {
         console.error('Order placement failed:', error);
         return throwError(() => new Error('Order placement failed'));
@@ -156,16 +158,16 @@ export class ProductService {
 
 
   orderList(userId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/orders?userId=${userId}`);
+    return this.http.get(`${this.apiUrl}/orders?userId=${userId}`, { withCredentials: true });
   }
 
   cancelOrder(orderId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/orders/${orderId}`);
+    return this.http.delete(`${this.apiUrl}/orders/${orderId}`, { withCredentials: true });
   }
   
   deleteCartItems(cartId: number) {
     return this.http
-      .delete(`${this.apiUrl}/cart/` + cartId)
+      .delete(`${this.apiUrl}/cart/` + cartId, { withCredentials: true })
       .subscribe((res) => {
         this.cartData.emit([]);
       });

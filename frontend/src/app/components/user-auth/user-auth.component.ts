@@ -18,21 +18,20 @@ export class UserAuthComponent {
   router = inject(Router)
   user = inject(UserService);
   product = inject(ProductService)
-  service = inject(UserService)
+  userService = inject(UserService)
   showLoginForm: boolean = false;
   userAuthError: string = '';
 
-
-
   onUserSignup(userSignUpdata: signUp) {
-    this.service.userSignUp(userSignUpdata).subscribe((res: any) => {
-      if (res) {
-        console.log('Signup Successfully.', res)
-        // localStorage.setItem('loggedUser', JSON.stringify(res));
-        const { id, name, email, password } = res.user;
-        const loggedUser = { id, name, email, password };
-        localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
-        this.router.navigate(['']);
+    this.userService.userSignUp(userSignUpdata).subscribe((res: any) => {
+      if (res) { 
+        this.showLoginForm = true;
+        // console.log('Signup Successfully.', res)
+        // // localStorage.setItem('loggedUser', JSON.stringify(res));
+        // const { id, name, email, password } = res.seller;
+        // const loggedUser = { id, name, email, password };
+        // localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
+        // this.router.navigate(['']);
       } else {
         console.error('Error occurred while signing up.')
       }
@@ -40,9 +39,9 @@ export class UserAuthComponent {
   }
 
   onUserLogin(userLogindata: signUp) {
-    this.service.userLogin(userLogindata).subscribe((res: any) => {
+    this.userService.userLogin(userLogindata).subscribe((res: any) => {
       if (res) {
-        console.log('Login Successfully.', res)
+        // console.log('Login Successfully.', res)
         // localStorage.setItem('loggedUser', JSON.stringify(res));
         const { id, name, email, password } = res.user;
         const loggedUser = { id, name, email, password };
@@ -65,7 +64,7 @@ export class UserAuthComponent {
       }
     })
   }
-
+  
   openSignUpForm() {
     this.showLoginForm = false
   }

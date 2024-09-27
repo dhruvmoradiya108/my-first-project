@@ -2,6 +2,7 @@ import { EventEmitter, inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { signUp } from '../../../data-type';
 
 @Injectable({
   providedIn: 'root'
@@ -15,17 +16,19 @@ export class UserService {
 
   constructor() { }
 
-  userSignUp(userData : any) {
-    return this.http.post(`${this.baseURL}/userSignUp`, userData)
+  userSignUp(user : signUp) {
+    return this.http.post(`${this.baseURL}/userSignUp`, user, {withCredentials: true})
   }
 
-  userLogin(userData: any) {
-    return this.http.post(`${this.baseURL}/userLogin`, userData)
+  userLogin(user : signUp) {
+    return this.http.post(`${this.baseURL}/userLogin`, user, {withCredentials: true})
   }
 
   userLogout(): Observable<any> {
     return this.http.get(`${this.baseURL}/logout`, {withCredentials: true});
   }
-
+  checkSession(): Observable<any> {
+    return this.http.get(`${this.baseURL}/check-session`, { withCredentials: true });
+  }
   
 }

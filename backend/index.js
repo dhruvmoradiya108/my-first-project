@@ -264,21 +264,15 @@ app.post("/cart", isLoggedIn, (req, res) => {
     name,
     price,
     image,
-    description,
-    color,
-    category,
     quantity,
   } = req.body;
   const cartItem = {
-    product_id: productId,
+    productId,
     name,
     price,
     image,
-    description,
-    color,
-    category,
     quantity,
-    user_id: req.session.userId,
+    userId: req.session.userId,
     added_at: new Date(),
   };
 
@@ -306,7 +300,7 @@ app.post("/cart", isLoggedIn, (req, res) => {
 //   });
 // });
 
-app.get("/cart", (req, res) => {
+app.get("/cart", isLoggedIn, (req, res) => {
   const userId = req.query.userId;
   const sql = "SELECT * FROM cart WHERE userId = ?";
   db.query(sql, [userId], (err, results) => {
@@ -335,7 +329,7 @@ app.get("/cart", (req, res) => {
 //   });
 // });
 
-app.delete("/cart/:id", (req, res) => {
+app.delete("/cart/:id", isLoggedIn, (req, res) => {
   const { id } = req.params;
 
   const sql = "DELETE FROM cart WHERE id = ?";
@@ -352,7 +346,7 @@ app.delete("/cart/:id", (req, res) => {
 });
 
 // Place Order
-app.post("/orders", (req, res) => {
+app.post("/orders", isLoggedIn, (req, res) => {
   const order = req.body;
   const formattedDate = new Date().toISOString().slice(0, 19).replace("T", " ");
   order.orderDate = formattedDate;
@@ -369,7 +363,7 @@ app.post("/orders", (req, res) => {
 });
 
 // // Get Order List
-app.get("/orders", (req, res) => {
+app.get("/orders", isLoggedIn, (req, res) => {
   const userId = req.query.userId;
 
   const sql = "SELECT * FROM orders WHERE userId = ?";
@@ -382,7 +376,7 @@ app.get("/orders", (req, res) => {
   });
 });
 
-app.delete("/orders/:id", (req, res) => {
+app.delete("/orders/:id", isLoggedIn, (req, res) => {
   const orderId = req.params.id;
 
   const sql = "DELETE FROM orders WHERE id = ?";

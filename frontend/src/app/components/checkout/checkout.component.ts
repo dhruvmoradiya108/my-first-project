@@ -62,13 +62,6 @@ export class CheckoutComponent implements OnInit {
     }, error => {
       console.error('Error fetching cart data:', error);
     });
-
-    // Retrieve userId from localStorage
-    // const user = localStorage.getItem('loggedUser');
-    // if (user) {
-    //   const parsedUser = JSON.parse(user);
-    //   this.userId = parsedUser && parsedUser[0] ? parsedUser[0].id : undefined;
-    // }
   }
 
   onPlaceOrder(data: orderUserInformation) {
