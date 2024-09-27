@@ -33,7 +33,7 @@ export class SellerAddProductComponent implements OnInit {
   ngOnInit(): void {
       this.sellerService.isLoggedIn.subscribe((loggedIn : boolean) => {
         if(!loggedIn){
-          this.router.navigate(['/sell-auth'])
+          this.router.navigate(['/'])
         }
       })
   }

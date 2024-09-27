@@ -61,13 +61,13 @@ export class SellerService {
         } else {
           // Session is not valid, emit false and redirect to login
           this.isLoggedIn.emit(false);
-          this.router.navigate(['/sell-auth']);
+          this.router.navigate(['/']);
         }
       },
       (error) => {
         // Handle session check error (e.g., network issues)
         this.isLoggedIn.emit(false);
-        this.router.navigate(['/sell-auth']);
+        this.router.navigate(['/']);
       }
     );
   }

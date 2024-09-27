@@ -103,7 +103,7 @@ export class HeaderComponent implements OnInit {
       (res) => {
         console.log('Logged out:', res);
         localStorage.removeItem('loggedSeller'); // Clear session data
-        this.router.navigate(['/login']);
+        this.router.navigate(['/sell-auth']);
       },
       (error) => {
         console.error('Error during logout:', error)

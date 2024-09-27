@@ -81,13 +81,8 @@ app.post("/signup", (req, res) => {
   const checkEmailQuery = "SELECT * FROM seller_data WHERE email = ?";
   db.query(checkEmailQuery, [email], async (err, result) => {
     if (err) throw err;
-    const secretKey = "mysecretkey"; // This should be stored securely in env
-      const encryptedMessage = encryptMessage(
-        "Email already exists",
-        secretKey
-      );
     if (result.length > 0) {
-      return res.status(200).json({ error: encryptedMessage });
+      return res.status(200).json({ error: "Email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -96,13 +91,7 @@ app.post("/signup", (req, res) => {
       "INSERT INTO seller_data (name, email, password) VALUES (?, ?, ?)";
     db.query(insertQuery, [name, email, hashedPassword], (err, result) => {
       if (err) throw err;
-
-      const secretKey = "mysecretkey"; // This should be stored securely in env
-      const encryptedMessage = encryptMessage(
-        "Seller registered successfully",
-        secretKey
-      );
-      res.status(201).json({ message: encryptedMessage });
+      res.status(201).json({ message: "Seller registered successfully" });
     });
   });
 });

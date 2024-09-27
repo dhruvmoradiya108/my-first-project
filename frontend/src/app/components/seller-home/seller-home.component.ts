@@ -32,7 +32,7 @@ export class SellerHomeComponent {
 
     this.sellerService.isLoggedIn.subscribe((loggedIn :boolean) => {
       if(!loggedIn){
-        this.router.navigate(['/sell-auth'])
+        this.router.navigate(['sell-auth'])
       }
     })
   }

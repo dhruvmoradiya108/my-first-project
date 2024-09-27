@@ -24,7 +24,8 @@ export class SellerAuthComponent {
     this.service.signUp(signUpData).subscribe(
       (response: any) => {
         alert('Signup successful!')
-        this.router.navigate(['/login'])
+        this.showLoginForm = true;
+        // this.router.navigate(['seller-home'])
         // if (response && response.seller) {
         //   console.log('Sign-up successful:', response);
         //   localStorage.setItem('loggedSeller', JSON.stringify(response.seller));
