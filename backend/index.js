@@ -40,12 +40,15 @@ const sessionStore = new MySQLStore({}, db.promise());
 app.use(
   session({
     key: "session_id",
-    secret: "xeseic",
+    secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 1 day
+      secure: false,
+      httpOnly: true,
+      sameSite: "lax",
     },
   })
 );
@@ -117,7 +120,12 @@ app.post("/login", (req, res) => {
 
     // If password matches, set session data
     req.session.userId = seller.id;
-    req.session.user = seller; // Store user data in session
+    // Store user data in session with role
+    req.session.user = {
+      id: seller.id,
+      email: seller.email,
+      role: seller.SellerRole, // or seller.UserRole based on your database column name
+    }; // Store user data in session
     res.status(200).json({ message: "Login successful", seller });
   });
 });
@@ -158,6 +166,16 @@ app.post("/userLogin", (req, res) => {
     req.session.user = result[0];
     res.status(200).json({ message: "Login successful", user: result[0] });
   });
+});
+
+app.get("/check-session", (req, res) => {
+  if (req.session && req.session.user) {
+    // If session exists, return session data (e.g., user details)
+    res.json({ isLoggedIn: true, userData: req.session.user });
+  } else {
+    // Session is not found, user is not logged in
+    res.json({ isLoggedIn: false });
+  }
 });
 
 // Protected Route to Add Product
@@ -259,13 +277,7 @@ app.put("/products/:id", isLoggedIn, (req, res) => {
 
 // Add Item to Cart (Protected)
 app.post("/cart", isLoggedIn, (req, res) => {
-  const {
-    productId,
-    name,
-    price,
-    image,
-    quantity,
-  } = req.body;
+  const { productId, name, price, image, quantity } = req.body;
   const cartItem = {
     productId,
     name,
@@ -287,19 +299,6 @@ app.post("/cart", isLoggedIn, (req, res) => {
     res.status(200).json({ message: "Added to cart successfully", result });
   });
 });
-
-// Get Cart Items for Logged-in User
-// app.get("/cart", isLoggedIn, (req, res) => {
-//   const sql = "SELECT * FROM cart WHERE user_id = ?";
-//   db.query(sql, [req.session.userId], (err, results) => {
-//     if (err) {
-//       console.error("Error fetching cart items:", err);
-//       return res.status(500).json({ message: "Failed to fetch cart items" });
-//     }
-//     res.json(results);
-//   });
-// });
-
 app.get("/cart", isLoggedIn, (req, res) => {
   const userId = req.query.userId;
   const sql = "SELECT * FROM cart WHERE userId = ?";
@@ -313,21 +312,6 @@ app.get("/cart", isLoggedIn, (req, res) => {
     res.json(results);
   });
 });
-
-// Remove Item from Cart (Protected)
-// app.delete("/cart/:id", isLoggedIn, (req, res) => {
-//   const sql = "DELETE FROM cart WHERE id = ? AND user_id = ?";
-//   db.query(sql, [req.params.id, req.session.userId], (err, result) => {
-//     if (err) {
-//       console.error("Error deleting cart item:", err);
-//       return res.status(500).json({ message: "Error deleting cart item" });
-//     }
-//     if (result.affectedRows === 0) {
-//       return res.status(404).json({ message: "Cart item not found or not authorized" });
-//     }
-//     res.json({ message: "Cart item deleted successfully" });
-//   });
-// });
 
 app.delete("/cart/:id", isLoggedIn, (req, res) => {
   const { id } = req.params;
@@ -387,16 +371,6 @@ app.delete("/orders/:id", isLoggedIn, (req, res) => {
     }
     res.send("Order deleted");
   });
-});
-
-app.get("/check-session", (req, res) => {
-  if (req.session.user) {
-    // If session exists, return session data (e.g., user details)
-    res.json({ isLoggedIn: true, userData: req.session.user });
-  } else {
-    // Session is not found, user is not logged in
-    res.json({ isLoggedIn: false });
-  }
 });
 
 app.listen(PORT, () => {

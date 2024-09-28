@@ -1,10 +1,11 @@
 export interface signUp {
-    id: number
+    id: number,
     name: string,
     email: string,
     password: string
 }
 export interface logIn {
+    id: number,
     email: string,
     password: string
 }

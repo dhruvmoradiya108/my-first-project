@@ -16,7 +16,7 @@ import { ProductService } from '../../services/product/product.service';
 export class UserAuthComponent {
 
   router = inject(Router)
-  user = inject(UserService);
+  // user = inject(UserService);
   product = inject(ProductService)
   userService = inject(UserService)
   showLoginForm: boolean = false;
@@ -43,9 +43,10 @@ export class UserAuthComponent {
       if (res) {
         // console.log('Login Successfully.', res)
         // localStorage.setItem('loggedUser', JSON.stringify(res));
-        const { id, name, email, password } = res.user;
-        const loggedUser = { id, name, email, password };
+        const { id, name, email, password, UserRole } = res.user;
+        const loggedUser = { id, name, email, password, UserRole };
         localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
+        this.userService.userCheckSession();
         this.router.navigate(['']);
       } else {
         console.error('Error occurred while logging in.')
@@ -55,7 +56,7 @@ export class UserAuthComponent {
 
   openLoginForm() {
     this.showLoginForm = true;
-    this.user.invalidUserAuth.subscribe((isError) => {
+    this.userService.invalidUserAuth.subscribe((isError) => {
       // console.warn(isError)
       if (isError) {
         this.userAuthError = 'User not found.';

@@ -51,6 +51,7 @@ export class SellerAuthComponent {
           // sessionStorage.setItem('seluse', JSON.stringify(res.seller))
           // Navigate to seller home page
           this.router.navigate(['seller-home']);
+          this.service.checkSession();
         }
       },
       (error) => {

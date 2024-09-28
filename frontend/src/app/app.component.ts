@@ -4,6 +4,8 @@ import { HeaderComponent } from "./components/header/header.component";
 import { FooterComponent } from "./components/footer/footer.component";
 import { Title } from '@angular/platform-browser';
 import { filter, map } from 'rxjs';
+import { UserService } from './services/user/user.service';
+import { SellerService } from './services/seller/seller.service';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +14,16 @@ import { filter, map } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   // title = 'frontend';
+
+  // userService = inject(UserService)
+  // sellerService = inject(SellerService)
+
+  // constructor() { 
+  //   this.sellerService.checkSession(); 
+  //   this.userService.userCheckSession(); 
+  // }
 
   router = inject(Router)
   titleService = inject(Title)
