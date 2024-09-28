@@ -22,9 +22,14 @@ export class ProductService {
     return this.http.post(`${this.apiUrl}/products`, data, { withCredentials: true });
   }
 
-  productList() {
-    return this.http.get<product[]>(`${this.apiUrl}/products`,  { withCredentials: true });
-  }
+  // productList() {
+  //   return this.http.get<product[]>(`${this.apiUrl}/products`,  { withCredentials: true });
+  // }
+
+    // Method to fetch paginated products
+    getProducts(page: number, limit: number): Observable<any> {
+      return this.http.get(`${this.apiUrl}/products?page=${page}&limit=${limit}`);
+    }
 
   productDelete(id: number) {
     return this.http.delete(`${this.apiUrl}/products/${id}`, { withCredentials: true });
@@ -33,6 +38,8 @@ export class ProductService {
   getProduct(id: string) {
     return this.http.get<product>(`${this.apiUrl}/products/${id}`, { withCredentials: true });
   }
+
+
 
   updateProduct(product: product) {
     return this.http.put<product>(

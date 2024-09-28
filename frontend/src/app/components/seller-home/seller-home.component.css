@@ -1,4 +1,4 @@
-table{
+table {
     text-align: left;
     color: brown;
     border-collapse: collapse;
@@ -41,10 +41,38 @@ table th {
 
 .delete-button {
     margin-right: 10px;
-  }
+}
 
 fa-icon {
     cursor: pointer;
     color: brown;
 }
 
+/* products.component.css */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 10px 20px;
+    background-color: brown;
+    border: 1px solid brown;
+    border-radius: 10%;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.pagination button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    margin: 10px 10px;
+    font-weight: bold;
+}

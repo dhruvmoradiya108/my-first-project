@@ -1,33 +1,53 @@
 <div class="product-list">
-    <h1>Product List</h1>
-    <p class="successMessage-p"> {{ productMessage }} </p>
-    <table>
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Color</th>
-                <th>Description</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of productList">
-                <td><img src="{{ item.image }}"></td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.price | currency : 'INR' }}</td>
-                <td>{{ item.category }}</td>
-                <td>{{ item.color }}</td>
-                <td>{{ item.description }}</td>
-                <td>
-                    <fa-icon [icon]="faTrash" class="delete-button" (click)="onDelete(item.id)">Delete</fa-icon>
-                    <a routerLink="/seller-update-product/{{item.id}}"> 
-                        <fa-icon [icon]="faEdit"></fa-icon>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+  <h1>Product List</h1>
+  <p class="successMessage-p">{{ productMessage }}</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Category</th>
+        <th>Color</th>
+        <th>Description</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of productList">
+        <td><img src="{{ item.image }}" /></td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.price | currency : "INR" }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.color }}</td>
+        <td>{{ item.description }}</td>
+        <td>
+          <fa-icon
+            [icon]="faTrash"
+            class="delete-button"
+            (click)="onDelete(item.id)"
+            >Delete</fa-icon
+          >
+          <a routerLink="/seller-update-product/{{ item.id }}">
+            <fa-icon [icon]="faEdit"></fa-icon>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="pagination">
+    <button
+      (click)="onPageChange(currentPage - 1)"
+      [disabled]="currentPage === 1"
+    >
+      Previous
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button
+      (click)="onPageChange(currentPage + 1)"
+      [disabled]="currentPage === totalPages"
+    >
+      Next
+    </button>
+  </div>
 </div>

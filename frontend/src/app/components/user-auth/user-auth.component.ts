@@ -47,7 +47,7 @@ export class UserAuthComponent {
         const loggedUser = { id, name, email, password, UserRole };
         localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
         this.userService.userCheckSession();
-        this.router.navigate(['']);
+        this.router.navigate(['/']);
       } else {
         console.error('Error occurred while logging in.')
       }

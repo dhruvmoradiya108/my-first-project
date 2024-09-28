@@ -35,6 +35,15 @@ function encryptMessage(message, secretKey) {
   return CryptoJS.AES.encrypt(message, secretKey).toString();
 }
 
+function formatResponse(success, message) {
+  const secretKey = process.env.ENCRYPTION_SECRET_KEY; // Ensure you have a secret key in your .env
+  const response = {
+    success,
+    message: encryptMessage(message, secretKey), // Encrypt the message
+  };
+  return response;
+}
+
 const sessionStore = new MySQLStore({}, db.promise());
 
 app.use(
@@ -120,6 +129,7 @@ app.post("/login", (req, res) => {
 
     // If password matches, set session data
     req.session.userId = seller.id;
+
     // Store user data in session with role
     req.session.user = {
       id: seller.id,
@@ -203,28 +213,49 @@ app.post("/products", isLoggedIn, (req, res) => {
         .status(500)
         .json({ message: "Failed to add product", error: err.message });
     }
-    res.status(200).json({ message: "Product added successfully", result });
+    res.status(200).json(formatResponse(true, "Product added successfully"));
   });
 });
 
 // Protected Route to Get Seller Products
-app.get("/sellerProducts", isLoggedIn, (req, res) => {
-  const sql = "SELECT * FROM products WHERE seller_id = ?";
-  db.query(sql, [req.session.userId], (err, results) => {
-    if (err) {
-      console.error("Error fetching seller products:", err);
-      return res.status(500).json({ message: "Failed to fetch products" });
-    }
-    res.json(results);
-  });
-});
+// app.get("/sellerProducts", isLoggedIn, (req, res) => {
+//   const sql = "SELECT * FROM products WHERE seller_id = ?";
+//   db.query(sql, [req.session.userId], (err, results) => {
+//     if (err) {
+//       console.error("Error fetching seller products:", err);
+//       return res.status(500).json({ message: "Failed to fetch products" });
+//     }
+//     res.json(results);
+//   });
+// });
 
-// Get All Products (Public)
-app.get("/products", (req, res) => {
-  const sql = "SELECT * FROM products";
-  db.query(sql, (err, results) => {
-    if (err) throw err;
-    res.json(results);
+// GET route for paginated products & Get All Products (Public)
+app.get('/products', (req, res) => {
+  let page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+  let limit = parseInt(req.query.limit) || 10; // Default limit is 10 items per page
+
+  // Calculate offset
+  const offset = (page - 1) * limit;
+
+  // Query to get paginated data
+  db.query('SELECT * FROM products LIMIT ?, ?', [offset, limit], (err, results) => {
+      if (err) return res.status(500).json({ error: err });
+
+      // Get total count of products
+      db.query('SELECT COUNT(*) as count FROM products', (countErr, countResult) => {
+          if (countErr) return res.status(500).json({ error: countErr });
+
+          const totalItems = countResult[0].count;
+          const totalPages = Math.ceil(totalItems / limit);
+
+          // Send the paginated response
+          res.json({
+              products: results,
+              currentPage: page,
+              totalPages: totalPages,
+              totalItems: totalItems,
+          });
+      });
   });
 });
 
@@ -241,7 +272,7 @@ app.delete("/products/:id", isLoggedIn, (req, res) => {
         .status(404)
         .json({ message: "Product not found or not authorized" });
     }
-    res.json({ message: "Product deleted successfully" });
+    res.json(formatResponse(true, "Product deleted successfully"));
   });
 });
 
